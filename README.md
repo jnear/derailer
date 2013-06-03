@@ -24,7 +24,10 @@ To run the analysis, execute:
 
     $ bundle exec rake railgrinder
 
-Then you'll find the results in /tmp/graph.json.
+Once it's finished, it will start a webserver. To see the analysis
+results, browse to:
+
+    http://localhost:8000
 
 ## Contributing
 
