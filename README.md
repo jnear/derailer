@@ -1,20 +1,22 @@
 # Railgrinder
 
-TODO: Write a gem description
+Railgrinder is a static analysis tool for Rails applications. It
+produces a graph showing the conditions under which your application
+allows data to flow from the database to rendered web pages seen by
+users. The goal is for this graph to aid the user in discovering
+unintended data flows that may represent security bugs.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add these lines to your application's Gemfile:
 
-    gem 'railgrinder'
+    gem 'sourcify', :git => "git://github.com/jnear/sourcify.git"
+    gem 'virtual_keywords', :git => "git://github.com/jnear/virtual_keywords.git"
+    gem 'railgrinder', :git => "git://github.com/jnear/railgrinder.git"
 
 And then execute:
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install railgrinder
+    $ bundle install
 
 ## Usage
 
