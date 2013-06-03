@@ -280,8 +280,8 @@ class Analyzer
 
 
     log "Loading class redefinitions..."
-    require File.expand_path(File.dirname(__FILE__) + '/railgrinder/class_redefinitions')
-    require File.expand_path(File.dirname(__FILE__) + '/railgrinder/alloy_translation')
+    require File.expand_path(File.dirname(__FILE__) + '/class_redefinitions')
+    require File.expand_path(File.dirname(__FILE__) + '/alloy_translation')
 
     log "done."
 
