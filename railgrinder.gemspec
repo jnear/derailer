@@ -20,9 +20,9 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
-  s.add_dependency 'rspec-rails'
-  s.add_dependency 'ruby_parser'
-  s.add_dependency 'ruby2ruby'
-  s.add_dependency 'sourcify'
-  s.add_dependency 'virtual_keywords'
+  spec.add_dependency 'rspec-rails'
+  spec.add_dependency 'ruby_parser'
+  spec.add_dependency 'ruby2ruby'
+  spec.add_dependency 'sourcify'
+  spec.add_dependency 'virtual_keywords'
 end
