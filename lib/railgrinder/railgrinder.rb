@@ -445,7 +445,7 @@ class Analyzer
     # puts "DONE ********************************************************************************"
 
     
-    File.open('/tmp/graph.json', 'w') do |file| 
+    File.open(File.expand_path(File.dirname(__FILE__) + '/viz/graph.json'), 'w') do |file| 
       file.write graph.to_json
     end
 
@@ -454,6 +454,21 @@ class Analyzer
     log ''
     log "Graph depth: " + graph.depth.to_s
     log "Used " + $ifs.to_s + " ifs"
+
+    log "Starting web server..."
+    log "When it's done, please browse to http://localhost:8000"
+    log ""
+
+    require 'webrick'
+    root = File.expand_path(File.dirname(__FILE__) + '/viz/')
+    server = WEBrick::HTTPServer.new :Port => 8000, :DocumentRoot => root    
+
+    trap 'INT' do server.shutdown end
+
+    server.start
+
+    log ""
+    log "All done!"
   end
 end
 
