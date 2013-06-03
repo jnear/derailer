@@ -20,7 +20,11 @@ And then execute:
 
 ## Usage
 
-TODO: Write usage instructions here
+To run the analysis, execute:
+
+    $ bundle exec rake railgrinder
+
+Then you'll find the results in /tmp/graph.json.
 
 ## Contributing
 

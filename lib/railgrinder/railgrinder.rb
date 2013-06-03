@@ -191,7 +191,7 @@ class Analyzer
     $VERBOSE = nil
 
     log "Loading rails files"
-    require File.expand_path(rails_path + "/config/environment", __FILE__)
+    require File.expand_path(rails_path.to_s + "/config/environment")
 
     log "Loading files from extra search directories"
     @analysis_params[:search_dirs].each do |dir|    
