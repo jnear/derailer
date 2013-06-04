@@ -459,9 +459,28 @@ class Analyzer
     log "When it's done, please browse to http://localhost:8000"
     log ""
 
+
+
+    # def start_webrick(config = {})
+    #   # always listen on port 3000
+    #   config.update(:Port => 8000)
+    #   config.update(:MimeTypes => {'rhtml' => 'text/html'})
+    #   server = HTTPServer.new(config)
+    #   yield server if block_given?
+    #   ['INT', 'TERM'].each {|signal| 
+    #     trap(signal) {server.shutdown}
+    #   }
+    #   server.start
+    # end
+
+    # start_webrick(:DocumentRoot => Dir::pwd)
+
     require 'webrick'
     root = File.expand_path(File.dirname(__FILE__) + '/viz/')
-    server = WEBrick::HTTPServer.new :Port => 8000, :DocumentRoot => root    
+    cb = lambda do |req, res| 
+      req.query[:graph_string] = graph.to_s
+    end
+    server = WEBrick::HTTPServer.new :Port => 8000, :DocumentRoot => root, :MimeTypes => {'rhtml' => 'text/html'}, :RequestCallback => cb
 
     trap 'INT' do server.shutdown end
 

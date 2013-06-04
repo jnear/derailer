@@ -25,13 +25,14 @@ path.link {
   stroke-width: 1.5px;
 }
 
-#key {
- float: right;
- border: 2px solid #3182bd;
-}
 
 #chart {
  float: left;
+}
+#key {
+ float: left;
+ border: 2px solid #3182bd;
+ margin-left: 50px;
 }
 
     </style>
@@ -45,7 +46,8 @@ path.link {
     $( "#tabs" ).tabs();
   });
   </script>
-    
+
+<title>Railgrinder Results</title>
 </head>
 <body>
 
@@ -58,12 +60,6 @@ path.link {
 
   <div style="height:2800px" id="tabs-1">
 
-<div id="key">
-<h2 align="center">Key</h2>
-
-<svg width="200" height="200"><g transform="translate(20,30)"><path class="link" d="M0,0C4.166666666666666,0 4.166666666666666,25 8.333333333333332,25"></path><path class="link" d="M8.333333333333332,25C12.499999999999998,25 12.499999999999998,50 16.666666666666664,50"></path><path class="link" d="M16.666666666666664,50C20.833333333333332,50 20.833333333333332,75 25,75"></path><path class="link" d="M25,75C29.166666666666664,75 29.166666666666664,100 33.33333333333333,100"></path><path class="link" d="M33.33333333333333,100C37.5,100 37.5,125 41.66666666666667,125"></path><path class="link" d="M41.66666666666667,125C45.833333333333336,125 45.833333333333336,150 50,150"></path><g class="node" transform="translate(0,0)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #536f05; "></rect><text dy="3.5" dx="5.5">Base Type</text></g><g class="node" transform="translate(8.333333015441895,25)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #7192df; "></rect><text dy="3.5" dx="5.5">Type</text></g><g class="node" transform="translate(16.66666603088379,50)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #65e2a2; "></rect><text dy="3.5" dx="5.5">Expression</text></g><g class="node" transform="translate(25,75)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #d1f56e; "></rect><text dy="3.5" dx="5.5">Condition 1</text></g><g class="node" transform="translate(33.33333206176758,100)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #d1f56e; "></rect><text dy="3.5" dx="5.5">Condition 2</text></g><g class="node" transform="translate(41.66666793823242,125)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #8d9280; "></rect><text dy="3.5" dx="5.5">Releasing Controller</text></g><g class="node" transform="translate(50,150)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #ffffff; "></rect><text dy="3.5" dx="5.5">Releasing Action</text></g></g></svg>
-
-</div>
 <div id="chart"></div>
 
 <script type="text/javascript">
@@ -200,9 +196,18 @@ function color(d) {
 
     </script>
 
+
+<div id="key">
+<h2 align="center">Key</h2>
+
+<svg width="200" height="200"><g transform="translate(20,30)"><path class="link" d="M0,0C4.166666666666666,0 4.166666666666666,25 8.333333333333332,25"></path><path class="link" d="M8.333333333333332,25C12.499999999999998,25 12.499999999999998,50 16.666666666666664,50"></path><path class="link" d="M16.666666666666664,50C20.833333333333332,50 20.833333333333332,75 25,75"></path><path class="link" d="M25,75C29.166666666666664,75 29.166666666666664,100 33.33333333333333,100"></path><path class="link" d="M33.33333333333333,100C37.5,100 37.5,125 41.66666666666667,125"></path><path class="link" d="M41.66666666666667,125C45.833333333333336,125 45.833333333333336,150 50,150"></path><g class="node" transform="translate(0,0)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #536f05; "></rect><text dy="3.5" dx="5.5">Base Type</text></g><g class="node" transform="translate(8.333333015441895,25)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #7192df; "></rect><text dy="3.5" dx="5.5">Type</text></g><g class="node" transform="translate(16.66666603088379,50)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #65e2a2; "></rect><text dy="3.5" dx="5.5">Expression</text></g><g class="node" transform="translate(25,75)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #d1f56e; "></rect><text dy="3.5" dx="5.5">Condition 1</text></g><g class="node" transform="translate(33.33333206176758,100)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #d1f56e; "></rect><text dy="3.5" dx="5.5">Condition 2</text></g><g class="node" transform="translate(41.66666793823242,125)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #8d9280; "></rect><text dy="3.5" dx="5.5">Releasing Controller</text></g><g class="node" transform="translate(50,150)" style="opacity: 1; "><rect y="-10.5" height="20" width="108" style="fill: #ffffff; "></rect><text dy="3.5" dx="5.5">Releasing Action</text></g></g></svg>
+
+</div>
+
+
   </div>
   <div id="tabs-2">
-    <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
+    <p><%= servlet_request.query[:graph_string] %></p>
   </div>
 </div>
   

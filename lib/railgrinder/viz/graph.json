@@ -1,0 +1,1088 @@
+{"name": "ActiveRecord (11)",
+"open_color": "#536F05", "closed_color": "#536F05","children": [
+{"name": "@_routes (2)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "@_routes (5)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (3)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "MealsController (7)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create_recipe", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "UsersController (5)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "SessionsController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "RecipesController (6)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "@_routes.url_for[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "ReviewsController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "@_request (2)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "@_request (5)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (3)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "MealsController (7)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create_recipe", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "UsersController (5)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "SessionsController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "RecipesController (6)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "@_request.session.[][] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "ReviewsController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "@_response (1)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "@_response (5)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (3)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "MealsController (7)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create_recipe", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "UsersController (5)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "SessionsController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "RecipesController (6)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "@_controller (1)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "@_controller (5)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (3)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "MealsController (7)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create_recipe", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "UsersController (5)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "SessionsController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "RecipesController (6)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "params (1)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "params[search] (3)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "Coop (10)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "Coop.all[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "params[search] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "Coop.new.errors.full_messages.first (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Coop.new.to_key.join[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Coop.new (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ coop : Coop | coop.id in params[id] }.name (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ coop : Coop | coop.id in params[id] }.description (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ coop : Coop | coop.id in params[id] }.address (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Coop.new[].errors.full_messages.first (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Coop.new[].to_key.join[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Coop.new[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "not Coop.new[].save (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+]}
+,
+{"name": "Class (17)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "Coop.new.class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Coop.new[].class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Meal.new.class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Meal.new[].class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ meal : Meal | meal.id in params[id] }.class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MealsController (3)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create_recipe", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "User.new.class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "User.new[].class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "User.class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Review.new.class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "ReviewsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Review.new.class.model_name.param_key.class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "ReviewsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Review.new.class.model_name.param_key.body (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "ReviewsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[recipe_id] }.reviews.create[].class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "ReviewsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[recipe_id] }.reviews.create[].class.model_name.param_key.class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "ReviewsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[recipe_id] }.reviews.create[].class.model_name.param_key.body (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "ReviewsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Recipe.new.class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Recipe.create[].class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[id] }.class.model_name.param_key (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "User (17)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "User (6)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "not Coop.new[].save (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "CoopsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "not Recipe.create[].save (2)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create_recipe", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "MealsController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "not { meal : Meal | meal.id in params[id] }.update_attributes[] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "not User.update_attributes[] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "User.errors.full_messages.first (2)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MealsController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "UsersController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "User.new.errors.full_messages.first (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "User.new.to_key.join[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "User.new (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ user : User | user.id in params[id] }.name (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ user : User | user.id in params[id] }.avatar.url[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ user : User | user.id in params[id] }.fav_food (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ user : User | user.id in params[id] }.bio (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ user : User | user.id in params[id] }.chefs_meals.length (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ user : User | user.id in params[id] }.rating (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "User.friends (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "User.all[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "params[search] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "User.new[].errors.full_messages.first (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "User.new[].to_key.join[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "User.new[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "not User.new[].save (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "UsersController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "User.to_key.join[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "UsersController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "Meal (12)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "Meal.new.errors.full_messages.first (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Meal.new.to_key.join[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Meal.new (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Meal.new[].errors.full_messages.first (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Meal.new[].to_key.join[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Meal.new[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "not Meal.new[].save (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "{ meal : Meal | meal.id in params[id] }.errors.full_messages.first (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create_recipe", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ meal : Meal | meal.id in params[id] }.to_key.join[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MealsController (3)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create_recipe", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ meal : Meal | meal.id in params[id] } (3)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "not Recipe.create[].save (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create_recipe", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "MealsController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "not { meal : Meal | meal.id in params[id] }.update_attributes[] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "{ meal : Meal | meal.id in params[id] }.title (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Meal.where[].all[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "params[search] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "{ meal : Meal | meal.id in params[id] }.eaters (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "not { meal : Meal | meal.id in params[id] }.update_attributes[] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+]}
+,
+{"name": "Recipe (20)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "Recipe.create[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "not Recipe.create[].save (2)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create_recipe", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "Recipe.new (2)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MealsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[recipe_id] }.reviews.create[].errors.full_messages.first (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "ReviewsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[recipe_id] }.reviews.create[].to_key.join[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "ReviewsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Recipe.all (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Recipe.new.errors.full_messages.first (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Recipe.new.to_key.join[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Recipe.create[].errors.full_messages.first (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Recipe.create[].to_key.join[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[id] }.dish_name.upcase (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[id] }.picture.url[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[id] }.serving_size (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[id] }.cost_per_person (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[id] }.ingredients (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[id] }.steps (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[id] } (2)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "not { recipe : Recipe | recipe.id in params[id] }.update_attributes[] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[id] }.reviews (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[id] }.dish_name (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[id] }.errors.full_messages.first (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ recipe : Recipe | recipe.id in params[id] }.to_key.join[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RecipesController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+,
+{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "Review (2)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "Review.new.errors.full_messages.first (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "ReviewsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Review.new.to_key.join[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "ReviewsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+]}
