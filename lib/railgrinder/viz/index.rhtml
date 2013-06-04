@@ -25,7 +25,11 @@ path.link {
   stroke-width: 1.5px;
 }
 
-
+#tabs {
+ width: 1000px;
+ margin-left: auto;
+ margin-right: auto;
+}
 #chart {
  float: left;
 }
@@ -52,6 +56,8 @@ path.link {
 <body>
 
 <div id="tabs">
+  <h2>Railgrinder Results</h2>
+  <h3><%= servlet_request.query[:rails_root] %></h3>
   <ul>
     <li><a href="#tabs-1">Results</a></li>
     <li><a href="#tabs-2">Log</a></li>

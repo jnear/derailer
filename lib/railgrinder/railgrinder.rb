@@ -479,6 +479,7 @@ class Analyzer
     root = File.expand_path(File.dirname(__FILE__) + '/viz/')
     cb = lambda do |req, res| 
       req.query[:graph_string] = graph.to_s
+      req.query[:rails_root] = Rails.root.to_s
     end
     server = WEBrick::HTTPServer.new :Port => 8000, :DocumentRoot => root, :MimeTypes => {'rhtml' => 'text/html'}, :RequestCallback => cb
 
