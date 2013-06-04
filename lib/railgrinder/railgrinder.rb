@@ -173,11 +173,13 @@ class RubiconAnalysis
   end
 end
 
-class Analyzer
-  def log(msg)
-    puts msg
-  end
+$log = []
+def log(msg)
+  $log << msg
+  puts msg
+end
 
+class Analyzer
   def initialize(analysis_params)
     @analysis_params = analysis_params
     $analyzer = self
@@ -239,7 +241,7 @@ class Analyzer
       c = condition.call
 
       ivars_before = get_instance_vars(condition.binding)
-      puts "BEFORE: " + ivars_before.to_s
+      log "BEFORE: " + ivars_before.to_s
 
       begin
         then_result = then_do.call
@@ -305,7 +307,7 @@ class Analyzer
     log "Redefining ActiveRecord Classes"
     activerecord_klasses.each do |klass|
       klass_name = klass.to_s
-      puts "working on class " + klass_name
+      log "working on class " + klass_name
 
       # build a structure describing all the fields and their types
       begin
@@ -317,11 +319,11 @@ class Analyzer
           add_class_field(klass_name, assoc.name, assoc.name.to_s.singularize.capitalize)
         end
       rescue => msg  
-        puts "    ERROR: Something went wrong ("+msg.to_s+")"  
+        log "    ERROR: Something went wrong ("+msg.to_s+")"  
       end 
       
       # replace the class with an expression so that all calls to the class methods are expressions
-      puts "replacing class definitions"
+      log "replacing class definitions"
       new_klass = Exp.new(klass_name, klass_name)
       new_klass.send(:define_method, :controller_name, lambda { klass_name })
 
@@ -341,7 +343,7 @@ class Analyzer
     require 'rspec/rails'
 
     def test_one_action(controller, action)
-      puts "Running " + controller.to_s + " / " + action.to_s
+      log "Running " + controller.to_s + " / " + action.to_s
 
       $track_to_s = false
       $to_s_exps = []
@@ -358,7 +360,7 @@ class Analyzer
       end
 
       request = ActionController::TestRequest.new
-      controller.send(:define_method, :request, proc { puts "REQUEST"; request})
+      controller.send(:define_method, :request, proc { log "REQUEST"; request})
 
       # [:request].each do |v|
       #   controller.send(:define_method, v, proc {Exp.new(v, v)})
@@ -369,18 +371,18 @@ class Analyzer
       controller.send(:define_method, :params, proc {my_params})
       controller.send(:define_method, :action_name, proc {action.to_s.dup})
       controller.send(:define_method, :redirect_to, lambda {|*args| raise UnreachableException })
-      controller.send(:define_method, :assert_is_devise_resource!, proc { puts "Assertion..."})
+      controller.send(:define_method, :assert_is_devise_resource!, proc { log "Assertion..."})
 
       old_render = controller.instance_method(:render_to_body)
       controller.send(:define_method, :render_to_body, lambda{|*args|
-                        puts "RENDERING"
+                        log "RENDERING"
                         $track_to_s = true
                         my_render = old_render.bind(self)
                         begin
                           my_render.call(*args)
-                          puts "  RENDERING SUCCESSFUL"
+                          log "  RENDERING SUCCESSFUL"
                         rescue Exception => e
-                          puts "  RENDERING EXCEPTION"
+                          log "  RENDERING EXCEPTION"
                         end
                         $track_to_s = false
                       })
@@ -402,22 +404,22 @@ class Analyzer
     controller_klasses.each do |controller|
       controller.action_methods.each do |action|
         begin
-          puts "START"
+          log "START"
           assign_vals = test_one_action(controller, action)
           results[controller.to_s + "/" + action.to_s] = assign_vals if assign_vals != []
         rescue UnreachableException => e
-          puts "UNREACHABLE"
+          log "UNREACHABLE"
           # unreachable...do nothing
         rescue Exception => e
-          puts "ERROR: couldn't do this one: " + e.to_s
+          log "ERROR: couldn't do this one: " + e.to_s
           e.backtrace.each do |line|
-            puts "ERROR: " + line.to_s
+            log "ERROR: " + line.to_s
           end
         end
       end
     end
 
-    puts "done ********************************************************************************"
+    log "done ********************************************************************************"
 
     graph = Graph.new("ActiveRecord", colors=["#536F05", "#536F05"])
 
@@ -430,19 +432,19 @@ class Analyzer
           translated = v.to_alloy
           add_node(graph, v.type.to_s, translated, v.constraints.map{|c| c.to_alloy}, controller, action)
         rescue => msg
-          puts "ERROR: couldn't translate " + v.to_s
-          puts "problem: " + msg.to_s
+          log "ERROR: couldn't translate " + v.to_s
+          log "problem: " + msg.to_s
         end
       end
     end
 
-    # puts "CONDITIONS ********************************************************************************"
+    # log "CONDITIONS ********************************************************************************"
 
     # $conditions.each do |c|
-    #   puts " " + c.to_alloy.to_s
+    #   log " " + c.to_alloy.to_s
     # end
 
-    # puts "DONE ********************************************************************************"
+    # log "DONE ********************************************************************************"
 
     
     File.open(File.expand_path(File.dirname(__FILE__) + '/viz/graph.json'), 'w') do |file| 
@@ -480,6 +482,7 @@ class Analyzer
     cb = lambda do |req, res| 
       req.query[:graph_string] = graph.to_s
       req.query[:rails_root] = Rails.root.to_s
+      req.query[:log] = $log
     end
     server = WEBrick::HTTPServer.new :Port => 8000, :DocumentRoot => root, :MimeTypes => {'rhtml' => 'text/html'}, :RequestCallback => cb
 
