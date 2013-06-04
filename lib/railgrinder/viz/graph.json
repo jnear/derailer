@@ -1,352 +1,329 @@
-{"name": "ActiveRecord (5)",
+{"name": "ActiveRecord (8)",
 "open_color": "#536F05", "closed_color": "#536F05","children": [
-{"name": "params (1)",
+{"name": "TqePlan (2)",
 "open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
-{"name": "params[search] (3)",
+{"name": "TqePlan.find_by_id[].student.name (1)",
 "open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "CoopsController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-,
-{"name": "MealsController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-,
-{"name": "UsersController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-]}
-,
-{"name": "Coop (4)",
-"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
-{"name": "Coop.all[] (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "params[search] (1)",
+{"name": "false (1)",
 "open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
-{"name": "CoopsController (1)",
+{"name": "TqePlansController (1)",
 "open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+{"name": "preview", "open_color": "#ffffff", "closed_color": "#ffffff"}
 ]}
 ]}
 ]}
 ,
-{"name": "{ coop : Coop | coop.id in params[id] }.name (1)",
+{"name": "TqePlan.find_by_id[].status.downcase (1)",
 "open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "CoopsController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ coop : Coop | coop.id in params[id] }.description (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "CoopsController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ coop : Coop | coop.id in params[id] }.address (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "CoopsController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-]}
-,
-{"name": "User (9)",
-"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
-{"name": "User (6)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "not Coop.new[].save (1)",
+{"name": "false (1)",
 "open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
-{"name": "CoopsController (1)",
+{"name": "TqePlansController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "preview", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+]}
+,
+{"name": "RqeAssignment (2)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "RqeAssignment.find_by_id[].student.name (2)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RqeAssignment.find_by_id[] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "params[id] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "RqeAssignmentsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "RqeAssignmentsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "preview", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "RqeAssignment.find_by_id[].status.downcase (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "RqeAssignmentsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "preview", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "Term (2)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "Term.current.id (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "SupportStatementsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "Term.all.map.map.join[].html_safe (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "SupportStatementsController (1)",
 "open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
 {"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
 ]}
 ]}
-,
-{"name": "not Recipe.create[].save (2)",
-"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
-{"name": "MealsController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "create_recipe", "open_color": "#ffffff", "closed_color": "#ffffff"}
 ]}
 ,
-{"name": "RecipesController (1)",
+{"name": "Faculty (1)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "Faculty.all.map.map.join[].html_safe (2)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "false (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "false (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "SupportStatementsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "SupportStatementsController (1)",
 "open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
 {"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
 ]}
 ]}
-,
-{"name": "MealsController (2)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-,
-{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
 ]}
 ,
-{"name": "not { meal : Meal | meal.id in params[id] }.update_attributes[] (1)",
-"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
-{"name": "MealsController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "UsersController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-,
-{"name": "not User.update_attributes[] (1)",
-"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
-{"name": "UsersController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-]}
-,
-{"name": "{ user : User | user.id in params[id] }.name (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "UsersController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ user : User | user.id in params[id] }.avatar.url[] (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "UsersController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ user : User | user.id in params[id] }.fav_food (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "UsersController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ user : User | user.id in params[id] }.bio (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "UsersController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ user : User | user.id in params[id] }.chefs_meals.length (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "UsersController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ user : User | user.id in params[id] }.rating (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "UsersController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "User.friends (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "UsersController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "User.all[] (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "params[search] (1)",
-"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
-{"name": "UsersController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-]}
-]}
-,
-{"name": "Meal (4)",
+{"name": "Report (1)",
 "open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
-{"name": "{ meal : Meal | meal.id in params[id] } (3)",
+{"name": "Report.find_by_id[].updated_at.to_date.to_formatted_s[] (1)",
 "open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "not Recipe.create[].save (1)",
+{"name": "User == Report.find_by_id[].about (1)",
 "open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
-{"name": "MealsController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "create_recipe", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "MealsController (2)",
+{"name": "Report.find_by_id[].about.advised_by?[] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "ReportsController (1)",
 "open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
 {"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+]}
+]}
 ,
+{"name": "User (5)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "User.advisees.select.map.map.join[].html_safe (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "not User.advisees.select.map.empty? (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "false (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "ReportsController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new_in_absentia", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+]}
+,
+{"name": "User.messages_owned.select.length (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MessagesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "User.name (2)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MessagesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "ProfilesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "User.contact (2)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MessagesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+,
+{"name": "ProfilesController (2)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
 {"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
 ,
-{"name": "not { meal : Meal | meal.id in params[id] }.update_attributes[] (1)",
-"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
-{"name": "MealsController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-]}
-,
-{"name": "{ meal : Meal | meal.id in params[id] }.title (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "MealsController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
 {"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
 ]}
 ]}
 ,
-{"name": "Meal.where[].all[] (1)",
+{"name": "User.avatar.url[] (1)",
 "open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "params[search] (1)",
+{"name": "ProfilesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "if (2)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "{ params[to] : params[to] | params[to].id in { @_request.session.[][] : @_request.session.[][] | @_request.session.[][].id in area2-chair@mit.edu } } (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MessagesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+,
+{"name": "{ params[cc] : params[cc] | params[cc].id in { @_request.session.[][] : @_request.session.[][] | @_request.session.[][].id in  } } (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "MessagesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "new", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "Admin (12)",
+"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
+{"name": "Admin.find_by_id[].avatar.url[] (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "params[role] (1)",
 "open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
-{"name": "MealsController (1)",
+{"name": "ProfilesController (1)",
 "open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
 {"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
 ]}
 ]}
 ]}
 ,
-{"name": "{ meal : Meal | meal.id in params[id] }.eaters (1)",
+{"name": "Admin.find_by_id[].name (1)",
 "open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "not { meal : Meal | meal.id in params[id] }.update_attributes[] (1)",
+{"name": "params[role] (1)",
 "open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
-{"name": "MealsController (1)",
+{"name": "ProfilesController (1)",
 "open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
 ]}
 ]}
 ]}
 ,
-{"name": "Recipe (11)",
-"open_color": "#7192DF", "closed_color": "#9DB1DF","children": [
-{"name": "Recipe.create[] (1)",
+{"name": "Admin.find_by_id[].contact (1)",
 "open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "not Recipe.create[].save (2)",
+{"name": "params[role] (1)",
 "open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
-{"name": "MealsController (1)",
+{"name": "ProfilesController (1)",
 "open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "create_recipe", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-,
-{"name": "RecipesController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "create", "open_color": "#ffffff", "closed_color": "#ffffff"}
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
 ]}
 ]}
 ]}
 ,
-{"name": "Recipe.all (1)",
+{"name": "Admin.find_by_id[].since.as_str (1)",
 "open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "RecipesController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "index", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ recipe : Recipe | recipe.id in params[id] }.dish_name.upcase (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "RecipesController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ recipe : Recipe | recipe.id in params[id] }.picture.url[] (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "RecipesController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ recipe : Recipe | recipe.id in params[id] }.serving_size (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "RecipesController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ recipe : Recipe | recipe.id in params[id] }.cost_per_person (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "RecipesController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ recipe : Recipe | recipe.id in params[id] }.ingredients (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "RecipesController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ recipe : Recipe | recipe.id in params[id] }.steps (1)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "RecipesController (1)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-]}
-,
-{"name": "{ recipe : Recipe | recipe.id in params[id] } (2)",
-"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "RecipesController (2)",
-"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
-,
-{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
-]}
-,
-{"name": "not { recipe : Recipe | recipe.id in params[id] }.update_attributes[] (1)",
+{"name": "params[role] (1)",
 "open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
-{"name": "RecipesController (1)",
+{"name": "ProfilesController (1)",
 "open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
 ]}
 ]}
 ]}
 ,
-{"name": "{ recipe : Recipe | recipe.id in params[id] }.reviews (1)",
+{"name": "Admin.find_by_id[].adviser.name (1)",
 "open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "RecipesController (1)",
+{"name": "params[role] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "ProfilesController (1)",
 "open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "show", "open_color": "#ffffff", "closed_color": "#ffffff"}
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
 ]}
 ]}
 ,
-{"name": "{ recipe : Recipe | recipe.id in params[id] }.dish_name (1)",
+{"name": "Admin.find_by_id[].coadviser.name (1)",
 "open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
-{"name": "RecipesController (2)",
+{"name": "params[role] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "ProfilesController (1)",
 "open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
-{"name": "edit", "open_color": "#ffffff", "closed_color": "#ffffff"}
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
 ,
-{"name": "update", "open_color": "#ffffff", "closed_color": "#ffffff"}
+{"name": "Admin.find_by_id[].counselor.name (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "params[role] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "ProfilesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "Admin.find_by_id[].research (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "params[role] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "ProfilesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "Admin.find_by_id[].minor_status (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "params[role] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "ProfilesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "Admin.find_by_id[].tqe_status (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "params[role] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "ProfilesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "Admin.find_by_id[].rqe_status (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "params[role] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "ProfilesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
+]}
+]}
+,
+{"name": "Admin.find_by_id[].thesis_proposal_status (1)",
+"open_color": "#65E2A2", "closed_color": "#97E2BC","_children": [
+{"name": "params[role] (1)",
+"open_color": "#D1F56E", "closed_color": "#E0F5A4","children": [
+{"name": "ProfilesController (1)",
+"open_color": "#8D9280", "closed_color": "#F2F7E4","children": [
+{"name": "public", "open_color": "#ffffff", "closed_color": "#ffffff"}
+]}
 ]}
 ]}
 ]}

@@ -209,7 +209,7 @@ class Analyzer
 
     def get_instance_vars(binding)
       ivars = eval("self.instance_variables", binding).select{|x| !x.to_s.start_with? "@_"}
-      Hash[ivars.map {|v| [v, eval("instance_variable_get(" + v.to_s + ")", binding)]}]
+      Hash[ivars.map {|v| [v, eval("instance_variable_get(\"" + v.to_s + "\")", binding)]}]
     end
 
     def fix_bindings(before, after, binding, condition)
@@ -246,6 +246,7 @@ class Analyzer
       begin
         then_result = then_do.call
       rescue UnreachableException
+        log "UNREACHABLE: first branch"
         redirect = Exp.new(:bool, :not, c)
       end
 
@@ -255,6 +256,7 @@ class Analyzer
       begin
         else_result = else_do.call
       rescue UnreachableException
+        log "UNREACHABLE: second branch"
         if redirect then
           raise UnreachableException
         else
