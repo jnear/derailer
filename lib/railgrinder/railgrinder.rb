@@ -356,7 +356,7 @@ class Analyzer
 
       # TODO: do we still need these?
       [:@_routes, :@_controller, :@_request, :@_response].each do |v|
-        p.instance_variable_set(v, Exp.new(v, v))
+        p.instance_variable_set(v, Exp.new(:unused, v))
       end
 
       request = ActionController::TestRequest.new
@@ -460,22 +460,6 @@ class Analyzer
     log "Starting web server..."
     log "When it's done, please browse to http://localhost:8000"
     log ""
-
-
-
-    # def start_webrick(config = {})
-    #   # always listen on port 3000
-    #   config.update(:Port => 8000)
-    #   config.update(:MimeTypes => {'rhtml' => 'text/html'})
-    #   server = HTTPServer.new(config)
-    #   yield server if block_given?
-    #   ['INT', 'TERM'].each {|signal| 
-    #     trap(signal) {server.shutdown}
-    #   }
-    #   server.start
-    # end
-
-    # start_webrick(:DocumentRoot => Dir::pwd)
 
     require 'webrick'
     root = File.expand_path(File.dirname(__FILE__) + '/viz/')

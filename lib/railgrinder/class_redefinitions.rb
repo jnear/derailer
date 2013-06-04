@@ -224,11 +224,20 @@ class Exp
   
   alias :to_str :to_s
   def to_s
+    # to eliminate some stuff that we don't want in results
+    def is_bad? str
+      ['new', 'to_key', 'errors', 'model_name'].each do |bad_str|
+        return true if str.include? bad_str
+      end
+      return false
+    end
+
     if $track_to_s then
       $track_to_s = false
       result = "Exp(" + @type.to_s + ", " + @args.map{|x| x.to_s}.join(", ") + ")"
       $track_to_s = true
-      $to_s_exps << self
+      # TODO eliminating everything with "new" might be overkill
+      $to_s_exps << self unless self.type == :unused or is_bad? result
     else
       result = "Exp(" + @type.to_s + ", " + @args.map{|x| x.to_s}.join(", ") + ")"
     end
