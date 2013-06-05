@@ -368,7 +368,7 @@ class Analyzer
       #   controller.send(:define_method, v, proc {Exp.new(v, v)})
       # end
       
-      @analysis_params[:current_user_func].call(Exp.new(:User, :User))
+      @analysis_params[:current_user_func].call(Exp.new(:User, :current_user))
       my_params = SymbolicArray.new
       controller.send(:define_method, :params, proc {my_params})
       controller.send(:define_method, :action_name, proc {action.to_s.dup})
