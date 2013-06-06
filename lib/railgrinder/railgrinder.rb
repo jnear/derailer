@@ -389,6 +389,13 @@ class Analyzer
                         $track_to_s = false
                       })
 
+      ActionController::Rendering.send(:define_method, :render, lambda{|*args|
+                                         super(self, *args)
+                                         self.content_type ||= Mime[lookup_context.rendered_format].to_s
+                                         response_body
+                                       })
+
+
       
       vars_before = p.instance_variables
       r = p.send(:process_action, action)
