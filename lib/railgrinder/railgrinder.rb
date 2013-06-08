@@ -390,7 +390,8 @@ class Analyzer
                       })
 
       ActionController::Rendering.send(:define_method, :render, lambda{|*args|
-                                         super(self, *args)
+                                         puts "THE ARGS ARE " + args.to_s
+                                         super(*args)
                                          self.content_type ||= Mime[lookup_context.rendered_format].to_s
                                          response_body
                                        })
