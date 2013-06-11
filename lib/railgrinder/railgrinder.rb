@@ -362,6 +362,8 @@ class Analyzer
       end
 
       request = ActionController::TestRequest.new
+      env = SymbolicArray.new
+      ActionController::TestRequest.send(:define_method, :env, proc { env })
       controller.send(:define_method, :request, proc { log "REQUEST"; request})
 
       # [:request].each do |v|
