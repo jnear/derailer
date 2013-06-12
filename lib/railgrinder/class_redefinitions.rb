@@ -16,6 +16,12 @@ class Object
     :unknown
   end
 
+  def metaclass
+    class << self
+      self
+    end
+  end
+
   alias :old_instance_variable_get :instance_variable_get
   alias :old_instance_variable_set :instance_variable_set
 
@@ -126,6 +132,10 @@ class SymbolicArray < Array
       @my_objs[key] = o
       o
     end
+  end
+
+  def []=(key, val)
+    @my_objs[key] = val
   end
 
   # THIS IS PROBABLY WRONG!

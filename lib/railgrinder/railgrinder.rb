@@ -248,6 +248,8 @@ class Analyzer
       rescue UnreachableException
         log "UNREACHABLE: first branch"
         redirect = Exp.new(:bool, :not, c)
+      rescue Exception => e
+        log "FAILURE: " + e.to_s
       end
 
       ivars_middle = get_instance_vars(condition.binding)
@@ -262,6 +264,8 @@ class Analyzer
         else
           redirect = c
         end
+      rescue Exception => e
+        log "FAILURE: " + e.to_s
       end
 
       ivars_end = get_instance_vars(condition.binding)
@@ -398,7 +402,10 @@ class Analyzer
                                          response_body
                                        })
 
-
+      # timezone hack
+      ActiveSupport::TimeZone.metaclass.send(:define_method, :[], lambda{|*args| Exp.new(:TimeZone, :timezone_of, *args)})
+      # wish I didn't have to...
+      Devise::Mapping.metaclass.send(:define_method, :find_scope!, lambda{|*args| Exp.new(:Scope, :scope_of, *args)})
       
       vars_before = p.instance_variables
       r = p.send(:process_action, action)
