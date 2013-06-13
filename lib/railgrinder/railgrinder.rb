@@ -2,6 +2,14 @@ require 'rubygems'
 require 'virtual_keywords'
 require 'set'
 
+class Object
+  def metaclass
+    class << self
+      self
+    end
+  end
+end
+
 Field = Struct.new(:name, :type)
 
 $all_vcs = Hash.new
@@ -193,6 +201,14 @@ class Analyzer
     $VERBOSE = nil
 
     log "Loading rails files"
+    require 'rails'
+
+    log "Patching filters"
+    old_before_filter = ActionController::Base.method(:before_filter)
+    ActionController::Base.metaclass.send(:define_method, :before_filter, lambda{|*args| log "HOHO"})
+
+    
+
     require File.expand_path(rails_path.to_s + "/config/environment")
 
     log "Loading files from extra search directories"
@@ -405,7 +421,7 @@ class Analyzer
       # timezone hack
       ActiveSupport::TimeZone.metaclass.send(:define_method, :[], lambda{|*args| Exp.new(:TimeZone, :timezone_of, *args)})
       # wish I didn't have to...
-      Devise::Mapping.metaclass.send(:define_method, :find_scope!, lambda{|*args| Exp.new(:Scope, :scope_of, *args)})
+      #Devise::Mapping.metaclass.send(:define_method, :find_scope!, lambda{|*args| Exp.new(:Scope, :scope_of, *args)})
       
       vars_before = p.instance_variables
       r = p.send(:process_action, action)
