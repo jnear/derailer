@@ -201,13 +201,6 @@ class Analyzer
     $VERBOSE = nil
 
     log "Loading rails files"
-    require 'rails'
-
-    log "Patching filters"
-    old_before_filter = ActionController::Base.method(:before_filter)
-    ActionController::Base.metaclass.send(:define_method, :before_filter, lambda{|*args| log "HOHO"})
-
-    
 
     require File.expand_path(rails_path.to_s + "/config/environment")
 
@@ -369,6 +362,7 @@ class Analyzer
 
       $track_to_s = false
       $to_s_exps = []
+      $callback_conditions = []
 
       p = controller.new
 
@@ -396,6 +390,24 @@ class Analyzer
       controller.send(:define_method, :action_name, proc {action.to_s.dup})
       controller.send(:define_method, :redirect_to, lambda {|*args| raise UnreachableException })
       controller.send(:define_method, :assert_is_devise_resource!, proc { log "Assertion..."})
+
+      ActionController::Base.metaclass.class_eval do
+        def __run_callback(key, kind, object, &blk) #:nodoc:
+          name = __callback_runner_name(key, kind)
+          log "CALLBACK " + key.to_s + ", " + kind.to_s + ", " + object.to_s
+          unless object.respond_to?(name, true)
+            str = object.send("_#{kind}_callbacks").compile(key, object)
+            class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
+            def #{name}() #{str} end
+              protected :#{name}
+              RUBY_EVAL
+          end
+          result = object.send(name, &blk)
+          log "CALLBACK RESULT: " + result.to_s
+          $callback_conditions << result
+          result
+        end
+      end
 
       old_render = controller.instance_method(:render_to_body)
       controller.send(:define_method, :render_to_body, lambda{|*args|
@@ -430,6 +442,14 @@ class Analyzer
 
       assign_vars = vars_after.select{|x| ! x.to_s.start_with? "@_"}
       assign_vals = assign_vars.map{|v| p.instance_variable_get(v)}
+
+      $to_s_exps.each do |e|
+          if e.is_a? Exp then
+            $callback_conditions.each do |c|
+              e.add_constraint(c)
+            end
+          end
+      end
 
       $to_s_exps
     end
