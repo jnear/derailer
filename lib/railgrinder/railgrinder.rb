@@ -201,6 +201,16 @@ class Analyzer
     $VERBOSE = nil
 
     log "Loading rails files"
+    require 'rails'
+
+    log "Patching filters"
+    old_before_filter = ActionController::Base.method(:before_filter)
+    ActionController::Base.metaclass.send(:define_method, :before_filter, lambda{|*args| 
+                                            log "HOHO " + args.to_s
+                                            old_before_filter.call(*args)
+                                          })
+
+
 
     require File.expand_path(rails_path.to_s + "/config/environment")
 
@@ -391,23 +401,23 @@ class Analyzer
       controller.send(:define_method, :redirect_to, lambda {|*args| raise UnreachableException })
       controller.send(:define_method, :assert_is_devise_resource!, proc { log "Assertion..."})
 
-      ActionController::Base.metaclass.class_eval do
-        def __run_callback(key, kind, object, &blk) #:nodoc:
-          name = __callback_runner_name(key, kind)
-          log "CALLBACK " + key.to_s + ", " + kind.to_s + ", " + object.to_s
-          unless object.respond_to?(name, true)
-            str = object.send("_#{kind}_callbacks").compile(key, object)
-            class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
-            def #{name}() #{str} end
-              protected :#{name}
-              RUBY_EVAL
-          end
-          result = object.send(name, &blk)
-          log "CALLBACK RESULT: " + result.to_s
-          $callback_conditions << result
-          result
-        end
-      end
+      # ActionController::Base.metaclass.class_eval do
+      #   def __run_callback(key, kind, object, &blk) #:nodoc:
+      #     name = __callback_runner_name(key, kind)
+      #     log "CALLBACK " + name.to_s + ", " + key.to_s + ", " + kind.to_s + ", " + object.to_s
+      #     unless object.respond_to?(name, true)
+      #       str = object.send("_#{kind}_callbacks").compile(key, object)
+      #       class_eval <<-RUBY_EVAL, __FILE__, __LINE__ + 1
+      #       def #{name}() #{str} end
+      #         protected :#{name}
+      #         RUBY_EVAL
+      #     end
+      #     result = object.send(name, &blk)
+      #     log "CALLBACK RESULT: " + result.to_s
+      #     $callback_conditions << result
+      #     result
+      #   end
+      # end
 
       old_render = controller.instance_method(:render_to_body)
       controller.send(:define_method, :render_to_body, lambda{|*args|
