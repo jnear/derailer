@@ -59,8 +59,9 @@ path.link {
   <h2>Railgrinder Results</h2>
   <h3><%= servlet_request.query[:rails_root] %></h3>
   <ul>
-    <li><a href="#tabs-1">Results</a></li>
-    <li><a href="#tabs-2">Log</a></li>
+    <li><a href="#tabs-1">Results by Type</a></li>
+    <li><a href="#tabs-2">Results by Action</a></li>
+    <li><a href="#tabs-3">Log</a></li>
   </ul>
 
 
@@ -90,7 +91,7 @@ var vis = d3.select("#chart").append("svg:svg")
   .append("svg:g")
     .attr("transform", "translate(20,30)");
 
-d3.json("graph.json", function(json) {
+d3.json("graph2.json", function(json) {
   json.x0 = 0;
   json.y0 = 0;
   update(root = json);
@@ -212,7 +213,10 @@ function color(d) {
 
 
   </div>
-  <div id="tabs-2">
+
+
+
+  <div id="tabs-3">
     <p><%= servlet_request.query[:log].join("<br>\n") %></p>
   </div>
 </div>

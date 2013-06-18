@@ -179,7 +179,7 @@ class Exp
   end
 
   def add_constraint(constraint)
-    @constraints << constraint
+    @constraints << constraint unless @constraints.include? constraint
   end
 
   def type

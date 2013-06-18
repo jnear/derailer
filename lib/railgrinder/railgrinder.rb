@@ -41,6 +41,25 @@ def add_node(graph, type, exp, conditions, controller, action)
 end
 
 
+def add_node_2(graph, type, exp, conditions, controller, action)
+  type_colors = ["#7192DF", "#9DB1DF"]
+  exp_colors = ["#65E2A2", "#97E2BC"]
+  condition_colors = ["#D1F56E", "#E0F5A4"]
+  controller_colors = ["#8D9280", "#F2F7E4"]
+  action_colors = ["#ffffff", "#ffffff"]
+
+  action_node = graph.add_child(controller, controller_colors, true).add_child(action, action_colors, true)
+
+  type_node = action_node.add_child(type, type_colors, true)
+  exp_node = type_node.add_child(exp, exp_colors, true)
+
+  current_node = exp_node
+  conditions.each do |c|
+    current_node = current_node.add_child(c, condition_colors, true)
+  end
+end
+
+
 class Graph
   def initialize(data, colors=["#c6dbef","#3182bd"], open=true)
     @data = data
@@ -201,14 +220,14 @@ class Analyzer
     $VERBOSE = nil
 
     log "Loading rails files"
-    require 'rails'
+    # require 'rails'
 
-    log "Patching filters"
-    old_before_filter = ActionController::Base.method(:before_filter)
-    ActionController::Base.metaclass.send(:define_method, :before_filter, lambda{|*args| 
-                                            log "HOHO " + args.to_s
-                                            old_before_filter.call(*args)
-                                          })
+    # log "Patching filters"
+    # old_before_filter = ActionController::Base.method(:before_filter)
+    # ActionController::Base.metaclass.send(:define_method, :before_filter, lambda{|*args| 
+    #                                         log "HOHO " + args.to_s
+    #                                         old_before_filter.call(*args)
+    #                                       })
 
 
 
@@ -291,14 +310,15 @@ class Analyzer
       fix_bindings(ivars_middle, ivars_end, condition.binding, Exp.new(:bool, :not, c))
 
       if redirect then
+        $path_constraints << redirect
         log "ADDING REDIRECT: " + redirect.to_s
-        ivars_end.each_pair do |var, val|
-          if val.is_a? Exp then
-            val.add_constraint(redirect)
-          else
-            log "IVAR is not an expression!"
-          end
-        end
+        # ivars_end.each_pair do |var, val|
+        #   if val.is_a? Exp then
+        #     val.add_constraint(redirect)
+        #   else
+        #     log "IVAR is not an expression!"
+        #   end
+        # end
       end
 
       $conditions << c
@@ -373,6 +393,7 @@ class Analyzer
       $track_to_s = false
       $to_s_exps = []
       $callback_conditions = []
+      $path_constraints = []
 
       p = controller.new
 
@@ -394,7 +415,11 @@ class Analyzer
       #   controller.send(:define_method, v, proc {Exp.new(v, v)})
       # end
       
-      @analysis_params[:current_user_func].call(Exp.new(:User, :current_user))
+      current_user = Exp.new(:User, :current_user)
+      @analysis_params[:current_user_func].call(current_user)
+      # this is specific...
+      controller.send(:define_method, :authenticate_user, proc { @user = current_user })
+
       my_params = SymbolicArray.new
       controller.send(:define_method, :params, proc {my_params})
       controller.send(:define_method, :action_name, proc {action.to_s.dup})
@@ -455,9 +480,12 @@ class Analyzer
 
       $to_s_exps.each do |e|
           if e.is_a? Exp then
-            $callback_conditions.each do |c|
+            $path_constraints.each do |c|
               e.add_constraint(c)
             end
+            # $callback_conditions.each do |c|
+            #   e.add_constraint(c)
+            # end
           end
       end
 
@@ -487,6 +515,7 @@ class Analyzer
     log "done ********************************************************************************"
 
     graph = Graph.new("ActiveRecord", colors=["#536F05", "#536F05"])
+    graph2 = Graph.new("ActionController", colors=["#536F05", "#536F05"])
 
     results.each_pair do |controller_action, values|
       controller, action = controller_action.split("/")
@@ -495,7 +524,9 @@ class Analyzer
       values.each do |v|
         begin
           translated = v.to_alloy
-          add_node(graph, v.type.to_s, translated, v.constraints.map{|c| c.to_alloy}, controller, action)
+          constraints = v.constraints.map{|c| c.to_alloy}
+          add_node(graph, v.type.to_s, translated, constraints, controller, action)
+          add_node_2(graph2, v.type.to_s, translated, constraints, controller, action)
         rescue => msg
           log "ERROR: couldn't translate " + v.to_s
           log "problem: " + msg.to_s
@@ -514,6 +545,10 @@ class Analyzer
     
     File.open(File.expand_path(File.dirname(__FILE__) + '/viz/graph.json'), 'w') do |file| 
       file.write graph.to_json
+    end
+
+    File.open(File.expand_path(File.dirname(__FILE__) + '/viz/graph2.json'), 'w') do |file| 
+      file.write graph2.to_json
     end
 
     log graph.to_s
