@@ -1,4 +1,4 @@
-require 'railgrinder'
+#require 'railgrinder'
 require 'rails'
 module Railgrinder
   class Railtie < Rails::Railtie

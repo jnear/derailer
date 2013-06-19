@@ -2,6 +2,15 @@ require 'rubygems'
 require 'virtual_keywords'
 require 'set'
 
+$log = []
+def log(msg)
+  $log << msg
+  puts msg
+end
+
+log "LOADING RAILGRINDER ********************************************************************************"
+
+
 class Object
   def metaclass
     class << self
@@ -200,12 +209,6 @@ class RubiconAnalysis
   end
 end
 
-$log = []
-def log(msg)
-  $log << msg
-  puts msg
-end
-
 class Analyzer
   def initialize(analysis_params)
     @analysis_params = analysis_params
@@ -231,17 +234,20 @@ class Analyzer
 
 
 
+#    require File.expand_path(rails_path.to_s + "/config/boot")
     require File.expand_path(rails_path.to_s + "/config/environment")
+    puts "made it past environment"
 
     log "Loading files from extra search directories"
     @analysis_params[:search_dirs].each do |dir|    
       Dir.glob(dir + '/*.rb').each { |file| require file }
     end
 
-    Dir.glob(Rails.root.to_s + '/app/models/*.rb').each { |file| require file }
+#    Rails.application.eager_load!
+    Dir.glob(Rails.root.to_s + '/app/models/**/*.rb').each { |file| puts "loading file " + file.to_s; require file }
     activerecord_klasses = ActiveRecord::Base.descendants
 
-    Dir.glob(Rails.root.to_s + '/app/controllers/*.rb').each { |file| require file }
+    Dir.glob(Rails.root.to_s + '/app/controllers/**/*.rb').each { |file| require file }
     controller_klasses = ActionController::Base.descendants
 
 

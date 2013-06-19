@@ -1,5 +1,7 @@
 desc 'run Railgrinder analysis'
 task :railgrinder do
+  require 'railgrinder/railgrinder'
+  
   RubiconAnalysis.new do
     rails_path Rails.root
 
