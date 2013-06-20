@@ -10,7 +10,6 @@ end
 
 log "LOADING RAILGRINDER ********************************************************************************"
 
-
 class Object
   def metaclass
     class << self
@@ -19,7 +18,7 @@ class Object
   end
 end
 
-Field = Struct.new(:name, :type)
+RailgrinderField = Struct.new(:name, :type)
 
 $all_vcs = Hash.new
 def add_vcs(controller, action, vc)
@@ -232,11 +231,7 @@ class Analyzer
     #                                         old_before_filter.call(*args)
     #                                       })
 
-
-
-#    require File.expand_path(rails_path.to_s + "/config/boot")
     require File.expand_path(rails_path.to_s + "/config/environment")
-    puts "made it past environment"
 
     log "Loading files from extra search directories"
     @analysis_params[:search_dirs].each do |dir|    
@@ -244,7 +239,7 @@ class Analyzer
     end
 
 #    Rails.application.eager_load!
-    Dir.glob(Rails.root.to_s + '/app/models/**/*.rb').each { |file| puts "loading file " + file.to_s; require file }
+    Dir.glob(Rails.root.to_s + '/app/models/**/*.rb').each { |file| log "loading file " + file.to_s; require file }
     activerecord_klasses = ActiveRecord::Base.descendants
 
     Dir.glob(Rails.root.to_s + '/app/controllers/**/*.rb').each { |file| require file }
@@ -346,7 +341,7 @@ class Analyzer
     def add_class_field(klass, name, type)
       # puts "adding class field: " + klass.to_s + ", " + name.to_s + ", " + type.to_s
       # puts "type of class is : " + klass.class.to_s
-      field = Field.new(name, type)
+      field = RailgrinderField.new(name, type)
 
       if $class_fields[klass] then
         $class_fields[klass] << field
@@ -415,7 +410,7 @@ class Analyzer
       request = ActionController::TestRequest.new
       env = SymbolicArray.new
       ActionController::TestRequest.send(:define_method, :env, proc { env })
-      controller.send(:define_method, :request, proc { log "REQUEST"; request})
+      controller.send(:define_method, :request, proc {request})
 
       # [:request].each do |v|
       #   controller.send(:define_method, v, proc {Exp.new(v, v)})
@@ -431,6 +426,17 @@ class Analyzer
       controller.send(:define_method, :action_name, proc {action.to_s.dup})
       controller.send(:define_method, :redirect_to, lambda {|*args| raise UnreachableException })
       controller.send(:define_method, :assert_is_devise_resource!, proc { log "Assertion..."})
+
+      # todo: spec the rest of these
+      CanCan::ControllerResource.send(:define_method, :load_and_authorize_resource, 
+                                      proc { log "LOADINGG";
+                                        name = @controller.class.to_s.sub("Controller", "").singularize.downcase
+                                        type = name.camelize.to_s.to_sym;
+                                        result = Exp.new(type, type, :find, Exp.new(:params, :id));
+                                        result.add_constraint(Exp.new(:bool, :CanCan_authorized))
+                                        log "NAME " + "@" + name.to_s;
+                                        log "OUTPUT " + result.to_s;
+                                        @controller.instance_variable_set("@" + name.to_s, result) })
 
       # ActionController::Base.metaclass.class_eval do
       #   def __run_callback(key, kind, object, &blk) #:nodoc:
