@@ -70,7 +70,7 @@ end
 
 class Graph
   def initialize(data, colors=["#c6dbef","#3182bd"], open=true)
-    @data = data
+    @data = data.delete("\n")
     @children = []
     @colors = colors
     @open = open

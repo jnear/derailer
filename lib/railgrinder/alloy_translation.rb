@@ -112,7 +112,10 @@ class Exp
           "THIS SHOULD NOT hAVE HAPPENED (a not)"
         else
           #raise "who knows wtf this is"
-          a.to_alloy + "." + b.to_alloy + "[" + args.map{|x| x.to_alloy}.join(", ") + "]"
+          cp = c.to_alloy
+          result = a.to_alloy + "." + b.to_alloy + "[" + ([c.to_alloy] + args.map{|x| x.to_alloy}).join(", ") + "]"
+          if result.include? '\'' or result.include? '\"' then raise "found a string with newline: " + c.to_s end
+          result
         end
       end
     end
@@ -142,5 +145,16 @@ end
 class String
   def to_alloy
     self
+  end
+end
+
+class SymbolicArray
+  def to_alloy
+    "[" + @my_objs.to_s + "]"
+  end
+
+  alias :to_str :to_s
+  def to_s
+    to_alloy
   end
 end
