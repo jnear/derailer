@@ -70,7 +70,7 @@ end
 
 class Graph
   def initialize(data, colors=["#c6dbef","#3182bd"], open=true)
-    @data = data.delete("\n")
+    @data = data.to_s.gsub("\"", "\'").delete("\n")
     @children = []
     @colors = colors
     @open = open
@@ -428,15 +428,17 @@ class Analyzer
       controller.send(:define_method, :assert_is_devise_resource!, proc { log "Assertion..."})
 
       # todo: spec the rest of these
-      CanCan::ControllerResource.send(:define_method, :load_and_authorize_resource, 
-                                      proc { log "LOADINGG";
-                                        name = @controller.class.to_s.sub("Controller", "").singularize.downcase
-                                        type = name.camelize.to_s.to_sym;
-                                        result = Exp.new(type, type, :find, Exp.new(:params, :id));
-                                        result.add_constraint(Exp.new(:bool, :CanCan_authorized))
-                                        log "NAME " + "@" + name.to_s;
-                                        log "OUTPUT " + result.to_s;
-                                        @controller.instance_variable_set("@" + name.to_s, result) })
+      if defined? CanCan then
+        CanCan::ControllerResource.send(:define_method, :load_and_authorize_resource, 
+                                        proc { log "LOADINGG";
+                                          name = @controller.class.to_s.sub("Controller", "").singularize.downcase
+                                          type = name.camelize.to_s.to_sym;
+                                          result = Exp.new(type, type, :find, Exp.new(:params, :id));
+                                          result.add_constraint(Exp.new(:bool, :CanCan_authorized))
+                                          log "NAME " + "@" + name.to_s;
+                                          log "OUTPUT " + result.to_s;
+                                          @controller.instance_variable_set("@" + name.to_s, result) })
+      end
 
       # ActionController::Base.metaclass.class_eval do
       #   def __run_callback(key, kind, object, &blk) #:nodoc:
