@@ -350,10 +350,19 @@ class Analyzer
       end
     end
 
+    activerecord_methods = ActiveRecord::Base.methods
     log "Redefining ActiveRecord Classes"
     activerecord_klasses.each do |klass|
       klass_name = klass.to_s
+      klass_methods = klass.methods - activerecord_methods
+
       log "working on class " + klass_name
+      log "methods: "
+
+      log "originally " + klass.methods.length.to_s + ", reduced to " + klass_methods.length.to_s
+      # klass_methods.each do |m|
+      #   log "&nbsp;&nbsp;" + m.to_s
+      # end
 
       # build a structure describing all the fields and their types
       begin
@@ -373,6 +382,14 @@ class Analyzer
       new_klass = Exp.new(klass_name, klass_name)
       new_klass.send(:define_method, :controller_name, lambda { klass_name })
 
+      klass_methods.each do |m|
+        old_method = klass.method(m)
+        new_klass.metaclass.send(:define_method, m, lambda{|*args|
+                                   log "HOHA: " + m.to_s
+                                   old_method.call(*args)
+                                 })
+      end
+
       #replace_defs(klass, new_klass)
 
       fst, snd = klass.to_s.split("::")
@@ -382,6 +399,7 @@ class Analyzer
         Object.const_set(klass.to_s, new_klass)
       end
     end
+
 
     log "Running analysis..."
 
@@ -508,6 +526,7 @@ class Analyzer
 
     results = Hash.new
     controller_klasses = ActionController::Base.descendants
+#    controller_klasses = [] # remove
     controller_klasses.each do |controller|
       controller.action_methods.each do |action|
         begin
