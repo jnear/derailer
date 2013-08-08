@@ -252,16 +252,39 @@ class Analyzer
     end
 
     def fix_bindings(before, after, binding, condition)
+      # log "<p>FIXING ********************************************************************************</p>"
+      # log "<p>before: " + before.to_s + "</p><br>"
+      # log "<p>after: " + after.to_s + "</p><br>"
+      # log "<p>binding: " + binding.to_s + "</p><br>"
+      # log "<p>condition: " + condition.to_s + "</p><br><br>"
+      # log "<p>DONE ********************************************************************************</p><br>"
+
       after.each_pair do |var, val|
         next unless val.is_a? Exp # TODO
+#        log "VAL IS EXP; comparison: " + (before[var].equals val).to_s
 
         if !before[var] then
+#          log "FOUND NO VALUE: " + val.to_s
           val.add_constraint(condition)
-        elsif before[var] != val then
+        elsif before[var].equals val then
+          # nothing
+        else
+          #log "ADDING CHOICE: " + var.to_s + ", " + val.to_s + ", " + before[var].to_s
+          before[var].add_constraint(Exp.new(:bool, :not, condition))
+          val.add_constraint(condition)
+
+          $temp1 = before[var]
+          $temp2 = val
+
+          choice = eval("instance_variable_set(:" + var.to_s + ", Choice.new($temp1, $temp2))", binding)
+#          log "CHOICE: " + choice.to_s
+
 #          choice = eval("instance_variable_set(" + var.to_s + ", Choice.new)",
 #                        binding)
+          #log "FOUND DIFFERENCE " + var.to_s + " : " + before[var].to_s + ", " + val.to_s
 
-          raise "ERROR: Not an addition!!"
+          # RIGHT HERE IS WHERE WE NEED TO DO SOMETHING LEGIT!!!!!!!1
+          #raise "ERROR: Not an addition!!"
           
           #val.add_constraint(condition)
         end
@@ -280,7 +303,7 @@ class Analyzer
       c = condition.call
 
       ivars_before = get_instance_vars(condition.binding)
-      log "BEFORE: " + ivars_before.to_s
+#      log "BEFORE: " + ivars_before.to_s
 
       begin
         then_result = then_do.call
@@ -519,6 +542,19 @@ class Analyzer
             #   e.add_constraint(c)
             # end
           end
+      end
+
+      def flatten_choice(c)
+        if c.is_a? Choice then
+          flatten_choice(c.left) + flatten_choice(c.right)
+        else
+          [c]
+        end
+      end
+      
+      $to_s_exps = $to_s_exps.map{|e| flatten_exp(e)}.flatten(1)
+      $to_s_exps.each do |e|
+        consolidate_constraints(e)
       end
 
       $to_s_exps

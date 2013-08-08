@@ -27,7 +27,7 @@ class Object
 
   def instance_variable_get(var)
     if var.is_a? Exp or var.to_s.starts_with? "@Exp" then
-      puts "USING MY instance variable get: " + self.to_s + "." + var.to_s
+      log "USING MY instance variable get: " + self.to_s + "." + var.to_s
       var
     else
       self.old_instance_variable_get(var)
@@ -36,7 +36,7 @@ class Object
 
   def instance_variable_set(var, val)
     if var.is_a? Exp or var.to_s.starts_with? "@Exp" then
-      puts "USING MY instance variable set"
+      log "USING MY instance variable set: " + self.to_s + "." + var.to_s + " = " + val.to_s
       Exp.new(:nil, self, :instance_variable_set, var, val)
     else
       self.old_instance_variable_set(var, val)
@@ -113,6 +113,13 @@ class Array
       self.old_join(str)
     end
   end
+
+  def my_include?(other)
+    if self.index {|e| (e.is_a? Exp and e.equals other) or (!e.is_a? Exp and e == other)} then
+      true
+    else false
+    end
+  end
 end
 
 class SymbolicArray < Array
@@ -156,6 +163,43 @@ class SymbolicHash < Hash
   end
 end
 
+
+def my_product(arrays)
+  if arrays.empty? then []
+  else
+    first, *rest = arrays
+    first.product(*rest)
+  end
+end
+
+def flatten_exp(e)
+  if e.is_a? Exp and !e.is_a? Choice then
+    processed_args = e.args.map {|a| flatten_exp(a)}
+    possibilities = my_product(processed_args)
+    possibilities.map do |a|
+      new_e = Exp.new(e.type, *a)
+      e.constraints.each {|c| new_e.add_constraint(c)}
+      new_e
+    end
+  elsif e.is_a? Choice then
+    e.left.add_constraint("CHOSEN")
+    flatten_exp(e.left) + flatten_exp(e.right)
+  else
+    [e]
+  end
+end
+
+def consolidate_constraints(e)
+  e.args.each do |a|
+    if a.is_a? Exp then
+      consolidate_constraints(a)
+      a.constraints.each do |c|
+        e.add_constraint(c)
+      end
+    end
+  end
+end
+
 class Exp
   def initialize(type, *args)
     @type = type
@@ -164,10 +208,14 @@ class Exp
 
     @args.each do |arg|
       if arg.is_a? Exp and arg.constraints != [] then
-        puts "WOOP transfer constraint " 
+#        puts "WOOP transfer constraint " 
         arg.constraints.each {|x| add_constraint(x)}
       end
     end
+  end
+
+  def args
+    @args
   end
 
   def class
@@ -179,7 +227,7 @@ class Exp
   end
 
   def add_constraint(constraint)
-    @constraints << constraint unless @constraints.include? constraint
+    @constraints << constraint unless @constraints.my_include? constraint
   end
 
   def type
@@ -254,6 +302,7 @@ class Exp
     result
   end
 
+  alias :equals :==
   def ==(other)
     Exp.new(:bool, self, :==, other)
   end
@@ -264,8 +313,53 @@ class Exp
 end
 
 class Choice < Exp
-  def initialize
-    # nothing
+  def initialize(left, right)
+    @left = left
+    @right = right
+  end
+
+  def left
+    @left
+  end
+
+  def right
+    @right
+  end
+
+  def constraints
+    @left.constraints + @right.constraints
+  end
+
+  def add_constraint(constraint)
+    @left.add_constraint(constraint)
+    @right.add_constraint(constraint)
+  end
+  
+  def method_missing(meth, *args, &block)
+    [@left, @right].each do |x|
+      if x.type.respond_to?(:method_defined?) and x.type.method_defined?(meth) then
+        # @type.new.send(meth, *args)
+        log "ERROR: we should be calling a method here: " + x.to_s + ", " + meth.to_s
+      end
+    end
+
+    # make a new choice node with my left and right
+    # so that choices will always be at the top level
+    Choice.new(Exp.new(@left.type, @left, meth, *args),
+               Exp.new(@right.type, @right, meth, *args))
+  end
+
+  def to_s
+    if $track_to_s then
+      $track_to_s = false
+      result = "Choice(" + @left.to_s + ", " + @right.to_s + ")"
+      $track_to_s = true
+
+      $to_s_exps << self # unless self.type == :unused or is_bad? result
+    else
+      result = "Choice(" + @left.to_s + ", " + @right.to_s + ")"
+    end
+    result
   end
 end
 
