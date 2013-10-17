@@ -540,20 +540,21 @@ class Analyzer
     end
 
     activerecord_methods = ActiveRecord::Base.methods
+    activerecord_instance_methods = ActiveRecord::Base.instance_methods
     log "Redefining ActiveRecord Classes"
     activerecord_klasses.each do |klass|
       klass_name = klass.to_s
       klass_methods = klass.methods - activerecord_methods
+      klass_instance_methods = klass.instance_methods - activerecord_instance_methods
 
       log "working on class " + klass_name
       log "methods: "
 
       log "originally " + klass.methods.length.to_s + ", reduced to " + klass_methods.length.to_s
+      log "and " + klass.instance_methods.length.to_s + "instance methods, reduced to " + klass_instance_methods.length.to_s
       # klass_methods.each do |m|
       #   log "  " + m.to_s
       # end
-
-      log "has photos_from? " + klass.methods.map{|x| x.to_s}.include?('photos_from').to_s
 
       # build a structure describing all the fields and their types
       begin
@@ -580,6 +581,17 @@ class Analyzer
                                    old_method.call(*args)
                                  })
       end
+
+      klass_instance_methods.each do |m|
+        old_method = klass.instance_method(m)
+        new_klass.send(:define_method, m, lambda{|*args|
+                                   log "HOHAE: " + m.to_s
+                                   old_method.call(*args)
+                                 })
+      end
+
+      log "has photos_from? " + new_klass.respond_to?(:photos_from).to_s
+      log "has photos_from? in thingy " + klass_instance_methods.map{|x| x.to_s}.include?('photos_from').to_s
 
       #replace_defs(klass, new_klass)
 
@@ -763,11 +775,11 @@ class Analyzer
 
     results = Hash.new
     controller_klasses = ActionController::Base.descendants
-    #controller_klasses = [PhotosController] # remove
+    controller_klasses = [PeopleController] # remove
     controller_klasses.each do |controller|
       controller.action_methods.each do |action|
 
-        #next unless action.to_s == "show" # remove
+        next unless action.to_s == "index" # remove
 
         puts "EEE " + action.to_s
         begin
