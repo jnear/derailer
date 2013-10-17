@@ -775,11 +775,11 @@ class Analyzer
 
     results = Hash.new
     controller_klasses = ActionController::Base.descendants
-    controller_klasses = [PeopleController] # remove
+    # controller_klasses = [PeopleController] # remove
     controller_klasses.each do |controller|
       controller.action_methods.each do |action|
 
-        next unless action.to_s == "index" # remove
+        # next unless action.to_s == "index" # remove
 
         puts "EEE " + action.to_s
         begin
