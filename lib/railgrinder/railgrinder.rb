@@ -665,6 +665,13 @@ class Analyzer
                                           @controller.instance_variable_set("@" + name.to_s, result) })
       end
 
+      if defined? Webfinger then
+        Webfinger.metaclass.send(:define_method, :in_background,
+                       lambda {|*args|
+                         nil #correct? 
+                       })
+      end
+
       ActionView::Helpers::UrlHelper.send(:define_method, :url_for,
                                           lambda{|*args|
                                             log "called url_for"
