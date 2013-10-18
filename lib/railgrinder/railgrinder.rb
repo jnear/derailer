@@ -2,10 +2,18 @@ require 'rubygems'
 require 'virtual_keywords'
 require 'set'
 
+$symbolic_execution = false
 $log = []
 def log(msg)
   $log << msg
   puts msg
+end
+
+def without_symbolic(&block)
+  sym = $symbolic_execution
+  $symbolic_execution = false
+  block.call
+  $symbolic_execution = sym
 end
 
 log "LOADING RAILGRINDER ********************************************************************************"
@@ -48,6 +56,24 @@ def add_node(graph, type, exp, conditions, controller, action)
   current_node.add_child(controller, controller_colors, true).add_child(action, action_colors, true)
 end
 
+def add_node_3(graph, type, exp, conditions, controller, action)
+  type_colors = ["#7192DF", "#9DB1DF"]
+  exp_colors = ["#65E2A2", "#97E2BC"]
+  condition_colors = ["#D1F56E", "#E0F5A4"]
+  controller_colors = ["#8D9280", "#F2F7E4"]
+  action_colors = ["#ffffff", "#ffffff"]
+
+  type_node = graph.add_child(type, type_colors, true)
+  exp_node = type_node.add_child(exp, exp_colors, false)
+
+  current_node = exp_node
+  conditions.each do |c|
+    current_node.add_child(c, condition_colors, true)
+  end
+
+  current_node.add_child(controller, controller_colors, true).add_child(action, action_colors, true)
+end
+
 
 def add_node_2(graph, type, exp, conditions, controller, action)
   type_colors = ["#7192DF", "#9DB1DF"]
@@ -68,19 +94,45 @@ def add_node_2(graph, type, exp, conditions, controller, action)
 end
 
 
+def add_node_4(graph, type, exp, conditions, controller, action)
+  type_colors = ["#7192DF", "#9DB1DF"]
+  exp_colors = ["#65E2A2", "#97E2BC"]
+  condition_colors = ["#D1F56E", "#E0F5A4"]
+  controller_colors = ["#8D9280", "#F2F7E4"]
+  action_colors = ["#ffffff", "#ffffff"]
+
+  type_node = graph.add_child(type)
+  exp_node = type_node.add_child(exp)
+  exp_node.open(false)
+
+  exp_node.add_child(controller.to_s + " / " + action.to_s, conditions)
+end
+
+
+
 class Graph
   def initialize(data, colors=["#c6dbef","#3182bd"], open=true)
-    @data = data.to_s.gsub("\"", "\'").delete("\n")
+    @data = data
     @children = []
     @colors = colors
     @open = open
+  end
+
+  def open(o)
+    @open = o
   end
 
   def data
     @data
   end
 
-  def add_child(val, colors=["#c6dbef", "#c6dbef"], open=false)
+  def add_child(data, colors=["#c6dbef", "#c6dbef"], open=false)
+    if data.is_a? Array then
+      val = "[" + data.map{|x| "\"" + x.to_s.gsub("\"", "\'").delete("\n") + "\""}.join(", ") + "]"
+    else
+      val = "\"" + data.to_s.gsub("\"", "\'").delete("\n") + "\""
+    end
+
     existing = @children.select{|c| c.data == val}
 
     if existing != [] then
@@ -98,12 +150,35 @@ class Graph
 
   def to_json
     if @children == [] then
-      "{\"name\": \"" + @data.to_s + "\", \"open_color\": \"" + @colors[0] + "\", \"closed_color\": \"" + @colors[1] + "\"}\n"
+      "{\"name\": " + @data.to_s + ", \"open_color\": \"" + @colors[0] + "\", \"closed_color\": \"" + @colors[1] + "\"}\n"
     else
-      "{\"name\": \"" + @data.to_s + " (" + @children.length.to_s + ")\",\n" +
+      "{\"name\": " + @data.to_s + ",\n" +
         "\"open_color\": \"" + @colors[0] + "\", \"closed_color\": \"" + @colors[1] + "\"," +
         if @open then "\"children\": [\n" else "\"_children\": [\n" end +
         @children.map{|v| v.to_json}.join(",\n") +
+        "]}\n"
+    end
+  end
+
+  def to_flare
+    if @children == [] then
+      "{\"name\": " + @data.to_s + ", \"open_color\": \"" + @colors[0] + "\", \"closed_color\": \"" + @colors[1] + "\", \"size\": 1}\n"
+    else
+      "{\"name\": " + @data.to_s + ",\n" +
+        "\"open_color\": \"" + @colors[0] + "\", \"closed_color\": \"" + @colors[1] + "\"," +
+        if @open then "\"children\": [\n" else "\"_children\": [\n" end +
+        @children.map{|v| v.to_flare}.join(",\n") +
+        "]}\n"
+    end
+  end
+
+  def to_bubble
+    if @children == [] then
+      "{\"label\": \"" + @data.to_s + "\", \"amount\": 1}\n"
+    else
+      "{\"label\": \"" + @data.to_s + "\", \"amount\":" + @children.length.to_s + ",\n" +
+        "\"children\": [\n" +
+        @children.map{|v| v.to_bubble}.join(",\n") +
         "]}\n"
     end
   end
@@ -128,6 +203,79 @@ class Graph
   def to_s
     mk_s 1
   end
+end
+
+
+def sets_equal(s1, s2)
+  result = true
+
+  s1.each do |m|
+    if !(s2.any?{|n| n == m}) then result = false end
+  end
+
+  s2.each do |m|
+    if !(s1.any?{|n| n == m}) then result = false end
+  end
+
+  return result
+end
+
+class ConstraintGraph < Graph
+  def initialize(data, constraints=[])
+    super(data)
+    @constraints = constraints
+  end
+
+  def set_constraints(constraints)
+    @constraints = constraints
+  end
+
+  def constraints
+    @constraints
+  end
+
+  def add_child(data, constraints=[])
+    if data.is_a? Array then
+      val = "[" + data.map{|x| "\"" + x.to_s.gsub("\"", "\'").delete("\n") + "\""}.join(", ") + "]"
+    else
+      val = "\"" + data.to_s.gsub("\"", "\'").delete("\n") + "\""
+    end
+
+    sym_ex = $symbolic_execution
+    $symbolic_execution = false
+    existing = @children.select{|c| c.data == val}
+
+    test_val = existing != [] && sets_equal(existing.first.constraints, constraints)
+    
+    $symbolic_execution = sym_ex
+    
+    if test_val then
+      #existing.first.set_constraints(constraints)
+      existing.first
+    else 
+      child = ConstraintGraph.new(val, constraints)
+      @children << child
+      child
+    end
+  end
+
+  def to_flare
+    if @children == [] then
+      if @constraints != [] then
+        cs = @constraints.map{|x| "\"" + x + "\""}.join(", ")
+        "{\"name\": " + @data.to_s + 
+          ", \"constraints\": [" + cs + "], \"size\": 1}\n"
+      else
+        "{\"name\": " + @data.to_s + ", \"size\": 1}\n"
+      end
+    else
+      "{\"name\": " + @data.to_s + ",\n" +
+        if @open then "\"children\": [\n" else "\"_children\": [\n" end +
+        @children.map{|v| v.to_flare}.join(",\n") +
+        "]}\n"
+    end
+  end
+
 end
 
 
@@ -239,12 +387,23 @@ class Analyzer
     end
 
 #    Rails.application.eager_load!
-    Dir.glob(Rails.root.to_s + '/app/models/**/*.rb').each { |file| log "loading file " + file.to_s; require file }
+
+    def my_load_file(file)
+      log "Loading file " + file.to_s
+      begin
+        require file
+      rescue Exception => e
+        log "Error loading file " + file.to_s + ": " + e.to_s
+      end
+    end
+
+    Dir.glob(Rails.root.to_s + '/app/models/**/*.rb').each { |file| my_load_file(file) }
     activerecord_klasses = ActiveRecord::Base.descendants
 
-    Dir.glob(Rails.root.to_s + '/app/controllers/**/*.rb').each { |file| require file }
+    Dir.glob(Rails.root.to_s + '/app/controllers/**/*.rb').each { |file| my_load_file(file) }
     controller_klasses = ActionController::Base.descendants
 
+    log "Done loading files."
 
     def get_instance_vars(binding)
       ivars = eval("self.instance_variables", binding).select{|x| !x.to_s.start_with? "@_"}
@@ -270,7 +429,7 @@ class Analyzer
           # nothing
         else
           #log "ADDING CHOICE: " + var.to_s + ", " + val.to_s + ", " + before[var].to_s
-          before[var].add_constraint(Exp.new(:bool, :not, condition))
+          #before[var].add_constraint(Exp.new(:bool, :not, condition))
           val.add_constraint(condition)
 
           $temp1 = before[var]
@@ -294,9 +453,11 @@ class Analyzer
     $conditions = []
     $ifs = 0
     log "Initializing keyword virtualizers"
-    controller_virtualizer = VirtualKeywords::Virtualizer.new(:for_subclasses_of => [ActionController::Base])
+    controller_virtualizer = VirtualKeywords::Virtualizer.new(:for_subclasses_of => [ActionController::Base, ActionView::Template, 
+                                                                                     ActionView::CompiledTemplates, ActionView::Base])
 
     controller_virtualizer.virtual_if do |condition, then_do, else_do|
+      puts "HFUCKER! IN IF"
       $ifs = $ifs + 1
       redirect = false
       
@@ -346,7 +507,12 @@ class Analyzer
       end
 
       $conditions << c
-      Exp.new(:if, c, then_result, else_result)
+
+      then_result.add_constraint(c) if then_result
+      else_result.add_constraint(Exp.new(:not, c)) if else_result
+      #Exp.new(:if, c, then_result, else_result)
+      log "RESULTS: " + then_result.to_s + ", " + else_result.to_s
+      Choice.new(then_result, else_result)
     end
 
 
@@ -374,17 +540,20 @@ class Analyzer
     end
 
     activerecord_methods = ActiveRecord::Base.methods
+    activerecord_instance_methods = ActiveRecord::Base.instance_methods
     log "Redefining ActiveRecord Classes"
     activerecord_klasses.each do |klass|
       klass_name = klass.to_s
       klass_methods = klass.methods - activerecord_methods
+      klass_instance_methods = klass.instance_methods - activerecord_instance_methods
 
       log "working on class " + klass_name
       log "methods: "
 
       log "originally " + klass.methods.length.to_s + ", reduced to " + klass_methods.length.to_s
+      log "and " + klass.instance_methods.length.to_s + "instance methods, reduced to " + klass_instance_methods.length.to_s
       # klass_methods.each do |m|
-      #   log "&nbsp;&nbsp;" + m.to_s
+      #   log "  " + m.to_s
       # end
 
       # build a structure describing all the fields and their types
@@ -413,6 +582,17 @@ class Analyzer
                                  })
       end
 
+      klass_instance_methods.each do |m|
+        old_method = klass.instance_method(m)
+        new_klass.send(:define_method, m, lambda{|*args|
+                                   log "HOHAE: " + m.to_s
+                                   old_method.call(*args)
+                                 })
+      end
+
+      log "has photos_from? " + new_klass.respond_to?(:photos_from).to_s
+      log "has photos_from? in thingy " + klass_instance_methods.map{|x| x.to_s}.include?('photos_from').to_s
+
       #replace_defs(klass, new_klass)
 
       fst, snd = klass.to_s.split("::")
@@ -423,6 +603,9 @@ class Analyzer
       end
     end
 
+
+    #special for bluecloth
+    Object.const_set("BlueCloth", Exp.new(:bluecloth, :bluecloth))
 
     log "Running analysis..."
 
@@ -460,7 +643,8 @@ class Analyzer
       current_user = Exp.new(:User, :current_user)
       @analysis_params[:current_user_func].call(current_user)
       # this is specific...
-      controller.send(:define_method, :authenticate_user, proc { @user = current_user })
+      controller.send(:define_method, :authenticate_user, proc { @user = current_user; @current_user = current_user })
+      controller.send(:define_method, :user_signed_in?, proc { current_user.signed_in? })
 
       my_params = SymbolicArray.new
       controller.send(:define_method, :params, proc {my_params})
@@ -481,6 +665,33 @@ class Analyzer
                                           @controller.instance_variable_set("@" + name.to_s, result) })
       end
 
+      if defined? Webfinger then
+        Webfinger.metaclass.send(:define_method, :in_background,
+                       lambda {|*args|
+                         nil #correct? 
+                       })
+      end
+
+      ActionView::Helpers::UrlHelper.send(:define_method, :url_for,
+                                          lambda{|*args|
+                                            log "called url_for"
+                                            ""
+                                          })
+
+      ActionView::Helpers.send(:define_method, :raw, lambda{|arg|
+                                 a = flatten_exp(arg)
+                                 without_symbolic do
+                                   puts "EEE " + a.uniq.to_s
+                                   puts "EEE " + a.uniq{|a,b| a == b}.length.to_s 
+                                 end
+                                 log "called raw " + flatten_exp(arg).map{|x| x.type.to_s}.join(", ")
+                                 arg })
+
+      ActionView::Helpers.send(:define_method, :sanitize, lambda{|arg|
+                                 log "called sanitize"
+                                 arg })
+
+      
       # ActionController::Base.metaclass.class_eval do
       #   def __run_callback(key, kind, object, &blk) #:nodoc:
       #     name = __callback_runner_name(key, kind)
@@ -508,16 +719,22 @@ class Analyzer
                           my_render.call(*args)
                           log "  RENDERING SUCCESSFUL"
                         rescue Exception => e
-                          log "  RENDERING EXCEPTION"
+                          log "  RENDERING EXCEPTION: " + e.to_s
+                          puts " TRACE"
+                          puts e.backtrace.join("\n")
                         end
                         $track_to_s = false
                       })
 
       ActionController::Rendering.send(:define_method, :render, lambda{|*args|
-                                         puts "THE ARGS ARE " + args.to_s
-                                         super(*args)
-                                         self.content_type ||= Mime[lookup_context.rendered_format].to_s
-                                         response_body
+                                         begin
+                                           super(*args)
+                                           self.content_type ||= Mime[lookup_context.rendered_format].to_s
+                                           response_body
+                                         rescue Exception => e
+                                           log "FUCKER EXCEPTION: " + e.to_s
+                                           ""
+                                         end
                                        })
 
       # timezone hack
@@ -526,7 +743,10 @@ class Analyzer
       #Devise::Mapping.metaclass.send(:define_method, :find_scope!, lambda{|*args| Exp.new(:Scope, :scope_of, *args)})
       
       vars_before = p.instance_variables
+      sym_ex = $symbolic_execution
+      $symbolic_execution = true
       r = p.send(:process_action, action)
+      $symbolic_execution = sym_ex
 
       vars_after = p.instance_variables
 
@@ -562,9 +782,13 @@ class Analyzer
 
     results = Hash.new
     controller_klasses = ActionController::Base.descendants
-#    controller_klasses = [] # remove
+    # controller_klasses = [PeopleController] # remove
     controller_klasses.each do |controller|
       controller.action_methods.each do |action|
+
+        # next unless action.to_s == "index" # remove
+
+        puts "EEE " + action.to_s
         begin
           log "START"
           assign_vals = test_one_action(controller, action)
@@ -583,8 +807,17 @@ class Analyzer
 
     log "done ********************************************************************************"
 
+    e1 = Exp.new(1,2)
+    e2 = Exp.new(3,4)
+
+    log 'First: ' + (e1 == e2).to_s
+    Exp.send(:define_method, :==, lambda{|x| equals(x)})
+    log 'Second: ' + (e1 == e2).to_s
+
     graph = Graph.new("ActiveRecord", colors=["#536F05", "#536F05"])
     graph2 = Graph.new("ActionController", colors=["#536F05", "#536F05"])
+    graph3 = Graph.new("ActiveRecord", colors=["#536F05", "#536F05"])
+    graph4 = ConstraintGraph.new("\"\"")
 
     results.each_pair do |controller_action, values|
       controller, action = controller_action.split("/")
@@ -596,12 +829,16 @@ class Analyzer
           constraints = v.constraints.map{|c| c.to_alloy}
           add_node(graph, v.type.to_s, translated, constraints, controller, action)
           add_node_2(graph2, v.type.to_s, translated, constraints, controller, action)
+          add_node_3(graph3, v.type.to_s, translated, constraints, controller, action)
+          add_node_4(graph4, v.type.to_s, translated, constraints, controller, action)
         rescue => msg
           log "ERROR: couldn't translate " + v.to_s
           log "problem: " + msg.to_s
         end
       end
     end
+
+    
 
     # log "CONDITIONS ********************************************************************************"
 
@@ -620,12 +857,117 @@ class Analyzer
       file.write graph2.to_json
     end
 
-    log graph.to_s
+
+    File.open(File.expand_path(File.dirname(__FILE__) + '/viz/constraint_graph.json'), 'w') do |file| 
+      file.write graph4.to_flare
+    end
+
+    log graph4.to_s
 
     log ''
     log "Graph depth: " + graph.depth.to_s
     log "Used " + $ifs.to_s + " ifs"
 
+    log ''
+
+    # try to make some interesting results
+    exps = results.values.flatten(1).select{|e| e.is_a? Exp}
+    sorted_exps = exps.sort{|a,b| b.constraints.length <=> a.constraints.length}
+
+    condition_set = Set.new
+    total_conditions = 0
+    sorted_exps.each do |e|
+      total_conditions += e.constraints.length
+      condition_set = condition_set + e.constraints
+    end
+
+    log 'Total condition instances: ' + total_conditions.to_s
+    log 'Total unique conditions: ' + condition_set.length.to_s
+
+    # log 'Trying the big thing:'
+    # big_thing = condition_set.to_a.combination(5)
+    # log 'Done'
+    # n = 0
+    # big_thing.each do |t|
+    #   n += 1
+    # end
+    # log 'Done doing: ' + n.to_s
+
+    def num_shared(a,b)
+      (a.constraints & b.constraints).length
+    end
+
+    def add_some_nodes(graph, exps)
+      if exps == [] then
+        # done
+      else
+        first_exp, *rest_exps = exps.sort{|a,b| b.constraints.length <=> a.constraints.length}
+        if first_exp.constraints == [] then
+          # no constraints left...ALL exps must have none left
+          ([first_exp] + rest_exps).each do |e|
+            graph.add_child(e.to_alloy)
+          end
+        else
+          working_set = first_exp.constraints
+          final_set = working_set
+
+          grouped_exps = [first_exp]
+        
+          while working_set.length >= 5 and rest_exps != [] do
+            final_set = working_set
+            first_exp, *rest_exps = rest_exps
+            grouped_exps << first_exp
+            working_set = working_set & first_exp.constraints
+          end
+
+          grouped_exps.each do |e|
+            e.remove_constraints(final_set)
+          end
+
+          new_node = graph.add_child(final_set.map{|x| x.to_alloy})
+          add_some_nodes(new_node, grouped_exps)
+          add_some_nodes(graph, rest_exps) # we might be missing one exp in the middle
+        end
+      end
+    end
+
+
+
+
+    ng = Graph.new("\"\"")
+    add_some_nodes(ng, exps)
+
+    log ng.to_s
+
+    File.open(File.expand_path(File.dirname(__FILE__) + '/viz/bubble.json'), 'w') do |file| 
+      file.write ng.to_bubble
+    end
+
+    File.open(File.expand_path(File.dirname(__FILE__) + '/viz/flare.json'), 'w') do |file| 
+      file.write ng.to_flare
+    end
+
+    File.open(File.expand_path(File.dirname(__FILE__) + '/viz/flare2.json'), 'w') do |file| 
+      file.write graph.to_flare
+    end
+
+    log 'Starting with ' + exps.length.to_s + ' exps'
+    #log 'Starting with ' + final.length.to_s + ' constraints'
+    # rest_exps.each do |e|
+    #   final = final & e.constraints
+    # end
+
+    # log 'Finished with ' + final.length.to_s + ' constraints:'
+    # log final.inspect
+
+    # (1..final.length).each do |n|
+    #   r = rest_exps.select{|e| num_shared(first_exp, e) >= n}
+    #   log 'There are ' + r.length.to_s + ' exps that share ' + n.to_s + ' constraints with max'
+    # end
+
+    log ''
+
+    
     log "Starting web server..."
     log "When it's done, please browse to http://localhost:8000"
     log ""

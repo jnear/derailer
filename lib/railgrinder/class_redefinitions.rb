@@ -182,7 +182,6 @@ def flatten_exp(e)
       new_e
     end
   elsif e.is_a? Choice then
-    e.left.add_constraint("CHOSEN")
     flatten_exp(e.left) + flatten_exp(e.right)
   else
     [e]
@@ -214,6 +213,10 @@ class Exp
     end
   end
 
+  def each(&block)
+    block.call(self)
+  end
+
   def args
     @args
   end
@@ -229,6 +232,11 @@ class Exp
   def add_constraint(constraint)
     @constraints << constraint unless @constraints.my_include? constraint
   end
+
+  def remove_constraints(constraints)
+    @constraints = @constraints - constraints
+  end
+
 
   def type
     @type
@@ -284,6 +292,8 @@ class Exp
   def to_s
     # to eliminate some stuff that we don't want in results
     def is_bad? str
+      # WARNING this was eliminating some really important stuff
+      return false
       ['new', 'to_key', 'errors', 'model_name'].each do |bad_str|
         return true if str.include? bad_str
       end
@@ -304,7 +314,15 @@ class Exp
 
   alias :equals :==
   def ==(other)
-    Exp.new(:bool, self, :==, other)
+    if $symbolic_execution then 
+      Exp.new(:bool, self, :==, other)
+    else
+      #self == other
+      puts "EEEE called equal: " + self.to_s + ", " + other.to_s
+      self.type == other.type and
+        self.args == other.args and
+        self.constraints == other.constraints
+    end
   end
 
   def implies(&block)
@@ -402,6 +420,19 @@ class Fixnum
       Exp.new(:plus, self, other)
     else
       self.old_plus(other)
+    end
+  end
+end
+
+class String
+  # DUBIOUS AT BEST
+  alias :old_equals :==
+  def ==(other)
+    if other.is_a? String and (self.starts_with? "Exp" or other.starts_with? "Exp") then
+      puts "HAHAHA WE ARE DOING IT BHICHTES"
+      Exp.new(:bool, :==, self, other)
+    else
+      old_equals(other)
     end
   end
 end
