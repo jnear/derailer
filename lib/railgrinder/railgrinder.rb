@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'virtual_keywords'
 require 'set'
+require 'json'
 
 $symbolic_execution = false
 $log = []
@@ -150,9 +151,9 @@ class Graph
 
   def to_json
     if @children == [] then
-      "{\"name\": " + @data.to_s + ", \"open_color\": \"" + @colors[0] + "\", \"closed_color\": \"" + @colors[1] + "\"}\n"
+      "{\"name\": " + JSON.generate(@data.to_s, quirks_mode: true) + ", \"open_color\": \"" + @colors[0] + "\", \"closed_color\": \"" + @colors[1] + "\"}\n"
     else
-      "{\"name\": " + @data.to_s + ",\n" +
+      "{\"name\": " + JSON.generate(@data.to_s, quirks_mode: true) + ",\n" +
         "\"open_color\": \"" + @colors[0] + "\", \"closed_color\": \"" + @colors[1] + "\"," +
         if @open then "\"children\": [\n" else "\"_children\": [\n" end +
         @children.map{|v| v.to_json}.join(",\n") +
@@ -236,9 +237,9 @@ class ConstraintGraph < Graph
 
   def add_child(data, constraints=[])
     if data.is_a? Array then
-      val = "[" + data.map{|x| "\"" + x.to_s.gsub("\"", "\'").delete("\n") + "\""}.join(", ") + "]"
+      val = "[" + data.map{|x| x.to_s.gsub("\"", "\'").delete("\n")}.join(", ") + "]"
     else
-      val = "\"" + data.to_s.gsub("\"", "\'").delete("\n") + "\""
+      val = data.to_s.gsub("\"", "\'").delete("\n")
     end
 
     sym_ex = $symbolic_execution
@@ -263,13 +264,13 @@ class ConstraintGraph < Graph
     if @children == [] then
       if @constraints != [] then
         cs = @constraints.map{|x| "\"" + x + "\""}.join(", ")
-        "{\"name\": " + @data.to_s + 
+        "{\"name\": " + JSON.generate(@data.to_s, quirks_mode: true) + 
           ", \"constraints\": [" + cs + "], \"size\": 1}\n"
       else
-        "{\"name\": " + @data.to_s + ", \"size\": 1}\n"
+        "{\"name\": " + JSON.generate(@data.to_s, quirks_mode: true) + ", \"size\": 1}\n"
       end
     else
-      "{\"name\": " + @data.to_s + ",\n" +
+      "{\"name\": " + JSON.generate(@data.to_s, quirks_mode: true) + ",\n" +
         if @open then "\"children\": [\n" else "\"_children\": [\n" end +
         @children.map{|v| v.to_flare}.join(",\n") +
         "]}\n"
@@ -867,7 +868,7 @@ class Analyzer
     graph = Graph.new("ActiveRecord", colors=["#536F05", "#536F05"])
     graph2 = Graph.new("ActionController", colors=["#536F05", "#536F05"])
     graph3 = Graph.new("ActiveRecord", colors=["#536F05", "#536F05"])
-    graph4 = ConstraintGraph.new("\"\"")
+    graph4 = ConstraintGraph.new("ActiveRecord")
 
     results.each_pair do |controller_action, values|
       controller, action = controller_action.split("/")
