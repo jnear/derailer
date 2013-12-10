@@ -14,7 +14,8 @@
 	
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
-
+	<link href="css/derailer.css" rel="stylesheet">
+	
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
@@ -30,49 +31,49 @@
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/scripts.js"></script>
+
+	<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+	<script type="text/javascript" src="js/derailer.js"></script>
 </head>
 
 <body>
-<div class="container">
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			<h3>
-			  DeRailer Results
-			</h3>
-			<div class="row clearfix">
-				<div class="col-md-8 column">
-				</div>
-				<div class="col-md-4 column">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title">
-							  Constraints
-							</h3>
-						</div>
-						<div class="panel-body">
-							Panel content
-						</div>
-						<div class="panel-footer">
-
-						</div>
-					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title">
-							  Filtered Constraints
-							</h3>
-						</div>
-						<div class="panel-body">
-							Panel content
-						</div>
-						<div class="panel-footer">
-
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+  <div class="container">
+    <div class="row clearfix">
+      <div class="col-md-12 column">
+	<div class="page-header">
+	  <h1>DeRailer Results</h1>
 	</div>
-</div>
+	<div class="row clearfix">
+	  <div class="col-md-8 column" id="chart1">
+	    
+	  </div>
+	  <div class="col-md-4 column">
+	    <div class="panel panel-default">
+	      <div class="panel-heading">
+		<h3 class="panel-title" id="popup_box_header">
+		  Constraints
+		</h3>
+	      </div>
+	      <div class="panel-body" id="popup_box_data">
+	      </div>
+	      <div class="panel-footer">
+	      </div>
+	    </div>
+	    <div class="panel panel-default">
+	      <div class="panel-heading">
+		<h3 class="panel-title">
+		  Filtered Constraints
+		</h3>
+	      </div>
+	      <div class="panel-body">
+	      </div>
+	      <div class="panel-footer">
+	      </div>
+	    </div>
+	  </div>
+	</div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

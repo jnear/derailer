@@ -1041,7 +1041,9 @@ class Analyzer
         req.query[:rails_root] = Rails.root.to_s
         req.query[:log] = $log
       end
-      server = WEBrick::HTTPServer.new :Port => 8000, :DocumentRoot => root, :MimeTypes => {'rhtml' => 'text/html'}, :RequestCallback => cb
+
+      WEBrick::HTTPUtils::DefaultMimeTypes['rhtml'] = 'text/html'
+      server = WEBrick::HTTPServer.new :Port => 8000, :DocumentRoot => root, :RequestCallback => cb
 
       trap 'INT' do server.shutdown end
 
