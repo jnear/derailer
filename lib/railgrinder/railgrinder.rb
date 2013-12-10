@@ -670,6 +670,7 @@ class Analyzer
       controller.send(:define_method, :action_name, proc {action.to_s.dup})
       controller.send(:define_method, :redirect_to, lambda {|*args| raise UnreachableException })
       controller.send(:define_method, :assert_is_devise_resource!, proc { log "Assertion..."})
+      controller.send(:define_method, :assert_is_devise_resource!, proc { log "Assertion..."})
 
       # to make sure rendering runs in rails 4
       controller.send(:define_method, :performed?, proc { false })
@@ -705,6 +706,13 @@ class Analyzer
                                             log "called form_for"
                                             ""
                                            })
+
+      ActionView::Helpers::TextHelper.send(:define_method, :simple_format,
+                                           lambda{|arg|
+                                             log "called simple_format"
+                                             arg.to_s # this will trigger inclusion if we're rendering
+                                           })
+
 
       if defined? ClientSideValidations then
         ClientSideValidations::ActionView::Helpers::FormHelper.send(:define_method, :form_for,
@@ -1018,24 +1026,29 @@ class Analyzer
 
     log ''
 
-    
-    log "Starting web server..."
-    log "When it's done, please browse to http://localhost:8000"
-    log ""
+    # wtf ruby
+    $graph = graph
 
-    require 'webrick'
-    root = File.expand_path(File.dirname(__FILE__) + '/viz/')
-    cb = lambda do |req, res| 
-      req.query[:graph_string] = graph.to_s
-      req.query[:rails_root] = Rails.root.to_s
-      req.query[:log] = $log
+    def start_web_server
+      log "Starting web server..."
+      log "When it's done, please browse to http://localhost:8000"
+      log ""
+
+      require 'webrick'
+      root = File.expand_path(File.dirname(__FILE__) + '/viz/')
+      cb = lambda do |req, res| 
+        req.query[:graph_string] = $graph.to_s
+        req.query[:rails_root] = Rails.root.to_s
+        req.query[:log] = $log
+      end
+      server = WEBrick::HTTPServer.new :Port => 8000, :DocumentRoot => root, :MimeTypes => {'rhtml' => 'text/html'}, :RequestCallback => cb
+
+      trap 'INT' do server.shutdown end
+
+      server.start
     end
-    server = WEBrick::HTTPServer.new :Port => 8000, :DocumentRoot => root, :MimeTypes => {'rhtml' => 'text/html'}, :RequestCallback => cb
-
-    trap 'INT' do server.shutdown end
-
-    server.start
-
+    
+    start_web_server
     log ""
     log "All done!"
   end
