@@ -94,13 +94,13 @@ path.link {
 .node rect {
   cursor: pointer;
   fill: #fff;
-  fill-opacity: .2;
+  fill-opacity: .25;
   stroke: #000000;
   stroke-width: 0.2px;
 }
 
 .node text {
-  font: 10px sans-serif;
+  font: 12px sans-serif;
   pointer-events: none;
 }
 
