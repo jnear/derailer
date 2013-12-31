@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Railgrinder::VERSION
   spec.authors       = ["Joseph Near"]
   spec.email         = ["jnear@csail.mit.edu"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = "Static analysis for Rails applications"
+  spec.summary       = "Static analysis for Rails applications"
   spec.homepage      = ""
   spec.license       = "GPLv3"
 
