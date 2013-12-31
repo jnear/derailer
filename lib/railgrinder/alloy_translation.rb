@@ -52,8 +52,11 @@ class Exp
       args = []
     end
 
+    # we should do something better here
     if @type == :params then # it will be a string or a HASH?!?!?!?!?!
       "params[" + args.shift.to_alloy + "]"
+    elsif @type == :session then # it will be a string or a HASH?!?!?!?!?!
+      "session[" + args.shift.to_alloy + "]"
     elsif @type == :forall then
       var = args.shift
       var_desc = var.map{|v| v.to_desc}.join(", ")
@@ -108,8 +111,8 @@ class Exp
         elsif b == :query then
           name = a.to_alloy.downcase
           "{ " + name + " : " + a.to_alloy + " | " + name + ".id in " + c.to_alloy + " }"
-        elsif a.to_s == "not" then
-          "THIS SHOULD NOT hAVE HAPPENED (a not)"
+        # elsif a.to_s == "not" then
+        #   "THIS SHOULD NOT hAVE HAPPENED (a not)"
         else
           #raise "who knows wtf this is"
           cp = c.to_alloy

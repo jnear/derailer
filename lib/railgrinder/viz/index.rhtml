@@ -1,429 +1,79 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.27.2"></script>
-    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js?1.27.2"></script>
-    <style type="text/css">
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>DeRailer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-.node rect {
-  cursor: pointer;
-  fill: #fff;
-  fill-opacity: .5;
-  stroke: #3182bd;
-  stroke-width: 1.5px;
-}
+	<!--link rel="stylesheet/less" href="less/bootstrap.less" type="text/css" /-->
+	<!--link rel="stylesheet/less" href="less/responsive.less" type="text/css" /-->
+	<!--script src="js/less-1.3.3.min.js"></script-->
+	<!--append ‘#!watch’ to the browser URL, then refresh the page. -->
+	
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+	<link href="css/derailer.css" rel="stylesheet">
+	
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+  <![endif]-->
 
-.node text {
-  font: 10px sans-serif;
-  pointer-events: none;
-}
+  <!-- Fav and touch icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/apple-touch-icon-144-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/apple-touch-icon-114-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/apple-touch-icon-72-precomposed.png">
+  <link rel="apple-touch-icon-precomposed" href="img/apple-touch-icon-57-precomposed.png">
+  <link rel="shortcut icon" href="img/favicon.png">
+  
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/scripts.js"></script>
 
-path.link {
-  fill: none;
-  stroke: #9ecae1;
-  stroke-width: 1.5px;
-}
-
-#tabs {
- width: 1000px;
- margin-left: auto;
- margin-right: auto;
-}
-#chart {
- float: left;
-}
-#key {
- float: left;
- border: 2px solid #3182bd;
- margin-left: 50px;
-}
-
-
-#popup_box { 
-
-    position:fixed;  
-    _position:absolute; /* hack for internet explorer 6 */  
-    height:600px;  
-    width:400px;  
-    background:#fefefe;  
-    right: 50px;
-    top: 50px;
-    z-index:100; /* Layering ( on-top of others), if you have lots of layers: I just maximized, you can change it yourself */
-    margin-left: 15px;  
-    
-    /* additional features, can be omitted */
-    border:2px solid #666666;      
-    padding:15px;  
-    font-size:15px;  
-    box-shadow: 2px 2px 5px #555555;
-
-    overflow:auto;
-}
-
-#chart{
-  height: 1000px;
-  width: 1000px;
-  overflow-y:scroll;
-}
-
-#filter_box { 
-
-    position:fixed;  
-    _position:absolute; /* hack for internet explorer 6 */  
-    height:300px;  
-    width:400px;  
-    background:#fefefe;  
-    right: 50px;
-    top: 700px;
-    z-index:100; /* Layering ( on-top of others), if you have lots of layers: I just maximized, you can change it yourself */
-    margin-left: 15px;  
-    
-    /* additional features, can be omitted */
-    border:2px solid #666666;      
-    padding:15px;  
-    font-size:15px;  
-    box-shadow: 2px 2px 5px #555555;
-
-    overflow:auto;
-}
-
-.constraint_box { 
-    background:#ffffff;  
-    z-index:150; /* Layering ( on-top of others), if you have lots of layers: I just maximized, you can change it yourself */
-    margin-left: 15px;  
-    
-    /* additional features, can be omitted */
-    border:2px solid #666666;      
-    padding:15px;  
-    font-size:15px;  
-    box-shadow: 2px 2px 5px #555555;
-
-    /* overflow:auto; */
-
-}
-
-.node rect {
-  cursor: pointer;
-  fill: #fff;
-  fill-opacity: .5;
-  stroke: #3182bd;
-  stroke-width: 1.5px;
-}
-
-.node text {
-  font: 10px sans-serif;
-  pointer-events: none;
-}
-
-path.link {
-  fill: none;
-  stroke: #9ecae1;
-  stroke-width: 1.5px;
-}
-
-
-
-    </style>
-
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-  <link rel="stylesheet" href="/resources/demos/style.css" />
-  <script>
-  $(function() {
-    $( "#tabs" ).tabs();
-  });
-  </script>
-
-<title>Railgrinder Results</title>
+	<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+	<script type="text/javascript" src="js/derailer.js"></script>
 </head>
+
 <body>
-
-<div id="tabs">
-  <h2>Railgrinder Results</h2>
-  <h3><%= servlet_request.query[:rails_root] %></h3>
-  <ul>
-    <li><a href="#tabs-1">Results by Type</a></li>
-    <li><a href="#tabs-2">Results by Action</a></li>
-    <li><a href="#tabs-3">Log</a></li>
-  </ul>
-
-
-  <div style="height:2800px" id="tabs-1">
-
-<div id="chart"></div>
-
-<script type="text/javascript">
-Array.prototype.getUnique = function(){
-   var u = {}, a = [];
-   for(var i = 0, l = this.length; i < l; ++i){
-      if(u.hasOwnProperty(this[i])) {
-         continue;
-      }
-      a.push(this[i]);
-      u[this[i]] = 1;
-   }
-   return a;
-}
-
-var current_constraints = [];
-
-var w = 960,
-    h = 2000,
-    i = 0,
-    barHeight = 20,
-    barWidth = w * .8,
-    duration = 400,
-    root;
-
-d3.json("constraint_graph.json", function(json) {
-  h = tree.nodes(json).length*barHeight;
-  d3.select("#chart").style("height", 100);
-});
-
-var tree = d3.layout.tree()
-    .size([h, 100]);
-
-var diagonal = d3.svg.diagonal()
-    .projection(function(d) { return [d.y, d.x]; });
-
-var vis = d3.select("#chart").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h)
-  .append("svg:g")
-    .attr("transform", "translate(20,30)");
-
-d3.json("constraint_graph.json", function(json) {
-  json.x0 = 0;
-  json.y0 = 0;
-  update(root = json);
-});
-
-
-function allowDrop(ev) {
-  ev.preventDefault();
-}
-
-function drag(ev) {
-  ev.dataTransfer.setData("Text",ev.target.id);
-}
-
-function drop(ev) {
-  ev.preventDefault();
-  var data=ev.dataTransfer.getData("Text");
-  ev.target.appendChild(document.getElementById(data));
-
-
-
-  current_constraints.push(data);
-
-  tree.nodes(root).forEach(function(d,i){
-    if (d.children == null && d._children != null) {
-      d.was_open = 1;
-      d.children = d._children;
-    }});
-
-  update(root);
-
-  vis.selectAll("g.node").filter(function(d,i) {
-    var to_remove = false;
-    if (typeof d.constraints != 'undefined') {
-      d.constraints.forEach(function(n, i) {
-        if (current_constraints.indexOf(n) > -1) {
-          d.parent.parent.children.splice(d.parent.parent.children.indexOf(d.parent),1);
-          // d.remove();
-          to_remove = true;
-          return;
-        }});
-      }
-    if (to_remove) { return true; } else { return false; }
-    }).remove();
-
-  update(root);
-
-  tree.nodes(root).forEach(function(d,i){
-    if (d.was_open == 1) {
-      d.was_open = 0;
-      d._children = d.children;
-      d.children = null;
-    }});
-
-
-  update(root);
-
-}
-
-
-
-
-
-function update(source) {
-  // Compute the flattened node list. TODO use d3.layout.hierarchy.
-  var nodes = tree.nodes(root);
-   
-  // Compute the "layout".
-  nodes.forEach(function(n, i) {
-    n.x = i * barHeight;
-  });
-
-
-  
-  // Update the nodes…
-  var node = vis.selectAll("g.node")
-      .data(nodes, function(d) { return d.id || (d.id = ++i); });
-  
-  var nodeEnter = node.enter().append("svg:g")
-      .attr("class", "node")
-      .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-      .style("opacity", 1e-6);
-
-  // Enter any new nodes at the parent's previous position.
-  nodeEnter.append("svg:rect")
-      .attr("y", -barHeight / 2)
-      .attr("height", barHeight)
-      .attr("width", barWidth)
-      .style("fill", color)
-      .on("click", click);
-  
-  nodeEnter.append("svg:text")
-      .attr("dy", 3.5)
-      .attr("dx", 5.5)
-      .text(function(d) { return d.name; });
-  
-  // Transition nodes to their new position.
-  nodeEnter.transition()
-      .duration(duration)
-      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
-      .style("opacity", 1);
-  
-  node.transition()
-      .duration(duration)
-      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
-      .style("opacity", 1)
-    .select("rect")
-      .style("fill", color);
-  
-  // Transition exiting nodes to the parent's new position.
-  node.exit().transition()
-      .duration(duration)
-      .attr("transform", function(d) { return "translate(" + source.y + "," + source.x + ")"; })
-      .style("opacity", 1e-6)
-      .remove();
-  
-  // Update the links…
-  var link = vis.selectAll("path.link")
-      .data(tree.links(nodes), function(d) { return d.target.id; });
-  
-  // Enter any new links at the parent's previous position.
-  link.enter().insert("svg:path", "g")
-      .attr("class", "link")
-      .attr("d", function(d) {
-        var o = {x: source.x0, y: source.y0};
-        return diagonal({source: o, target: o});
-      })
-    .transition()
-      .duration(duration)
-      .attr("d", diagonal);
-  
-  // Transition links to their new position.
-  link.transition()
-      .duration(duration)
-      .attr("d", diagonal);
-  
-  // Transition exiting nodes to the parent's new position.
-  link.exit().transition()
-      .duration(duration)
-      .attr("d", function(d) {
-        var o = {x: source.x, y: source.y};
-        return diagonal({source: o, target: o});
-      })
-      .remove();
-  
-  // Stash the old positions for transition.
-  nodes.forEach(function(d) {
-    d.x0 = d.x;
-    d.y0 = d.y;
-  });
-}
-
-// Toggle children on click.
-function click(d) {
-  if (d.children) {
-    d._children = d.children;
-    d.children = null;
-  } else {
-    d.children = d._children;
-    d._children = null;
-  }
-  update(d);
-
-  if (!(d.children || d._children)) {
-    d3.select("#popup_box_data").html("");
-    d3.select("#popup_box_header").html("Constraints: 0");
-  }
-
-
-  if (typeof d.constraints != 'undefined' && d.constraints.length > 0) {
-    d3.select("#popup_box_data").html("");
-    /* get_constraints(d) */
-
-    var constraints = d.constraints.getUnique();
-    var constraints_div = d3.select("#popup_box_data");
-    d3.select("#popup_box_header").html("Constraints: " + constraints.length);
-
-    constraints.forEach(function(c) {
-      constraints_div.append("div")
-      .attr("class", "constraint_box")
-      .attr("id", c).attr("draggable", "true")
-      .attr("ondragstart", "drag(event)").html(c)
-      .on("click", function() {
-          console.log(c);
-          d3.select(this).remove();
-          d3.event.stopPropagation(); 
-      });
-    });
-  }
-
-}
-
-function color(d) {
-  return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
-}
-
-    </script>
-	<div id="popup_box">
-	  <div id="popup_box_header">
-	    Constraints: 0
-	    </div>
-	  
-          <div id="popup_box_data">
-	  
-          </div>
-	  
+  <div class="container">
+    <div class="row clearfix">
+      <div class="col-md-12 column">
+	<div class="page-header">
+	  <h1>DeRailer Results</h1>
 	</div>
-
-	<div id="filter_box" ondrop="drop(event)" ondragover="allowDrop(event)">
-	  
-	  <div id="popup_box_header">
-	    Filtered Constraints
+	<div class="row clearfix">
+	  <div class="col-md-8 column" id="chart1">
+	    
 	  </div>
-
-          <!-- <div id="filter_box_data"> -->
-	  
-          <!-- </div> -->
-
+	  <div class="col-md-4 column">
+	    <div class="panel panel-default">
+	      <div class="panel-heading">
+		<h3 class="panel-title" id="popup_box_header">
+		  Constraints
+		</h3>
+	      </div>
+	      <div class="panel-body" id="popup_box_data">
+	      </div>
+	      <div class="panel-footer">
+	      </div>
+	    </div>
+	    <div class="panel panel-default">
+	      <div class="panel-heading">
+		<h3 class="panel-title">
+		  Filtered Constraints
+		</h3>
+	      </div>
+	      <div class="panel-body">
+	      </div>
+	      <div class="panel-footer">
+	      </div>
+	    </div>
+	  </div>
 	</div>
-
-
+      </div>
+    </div>
   </div>
-
-
-
-  <div id="tabs-3">
-    <p><%= servlet_request.query[:log].join("<br>\n") %></p>
-  </div>
-</div>
-  
-  </body>
+</body>
 </html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?1.27.2"></script>
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js?1.27.2"></script>
+    <link href="css/derailer.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <link rel="stylesheet" href="/resources/demos/style.css" />
+
+  <script type="text/javascript" src="js/scripts.js"></script>
+  <script>
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+  </script>
+
+<title>Railgrinder Results</title>
+</head>
+<body>
+
+<div id="tabs">
+  <h2>Railgrinder Results</h2>
+  <h3><%= servlet_request.query[:rails_root] %></h3>
+  <ul>
+    <li><a href="#tabs-1">Results by Type</a></li>
+    <li><a href="#tabs-2">Results by Action</a></li>
+    <li><a href="#tabs-3">Log</a></li>
+  </ul>
+
+
+  <div style="height:2800px" id="tabs-1">
+
+<div id="chart"></div>
+
+	<div id="popup_box">
+	  <div id="popup_box_header">
+	    Constraints: 0
+	    </div>
+	  
+          <div id="popup_box_data">
+	  
+          </div>
+	  
+	</div>
+
+	<div id="filter_box" ondrop="drop(event)" ondragover="allowDrop(event)">
+	  
+	  <div id="popup_box_header">
+	    Filtered Constraints
+	  </div>
+
+          <!-- <div id="filter_box_data"> -->
+	  
+          <!-- </div> -->
+
+	</div>
+
+
+  </div>
+
+
+
+  <div id="tabs-3">
+    <p><%= servlet_request.query[:log].join("<br>\n") %></p>
+  </div>
+</div>
+  
+  </body>
+</html>

@@ -3,6 +3,7 @@ class Object
   $symbolic_execution = false
   $results = []
 
+  alias :equals :==
   # alias :old_send :send
   # def send(meth, *args)
   #   if meth.is_a? Exp then
@@ -123,8 +124,15 @@ class Array
 end
 
 class SymbolicArray < Array
-  def initialize
+  def initialize(type)
+    @type = type
     @my_objs = Hash.new
+  end
+
+  def require(fld)
+    e = Exp.new(@type, self)
+    e.add_constraint(Exp.new(:bool, :field_required, fld))
+    e
   end
 
   def join(str)
@@ -135,7 +143,7 @@ class SymbolicArray < Array
     if @my_objs.has_key? key
       @my_objs[key]
     else
-      o = Exp.new(:params, key)
+      o = Exp.new(@type, key)
       @my_objs[key] = o
       o
     end
@@ -213,6 +221,14 @@ class Exp
     end
   end
 
+  def save
+    puts "____ saving " + self.to_alloy + " with constraints"
+    self.constraints.map{|x| x.to_alloy}.each do |c|
+      puts "____  " + c.to_s
+    end
+    puts "____"
+  end
+
   def each(&block)
     block.call(self)
   end
@@ -244,7 +260,7 @@ class Exp
 
   def coerce(other)
     puts "COERCING " + self.to_s + ", other: " + other.to_s
-    [other, :unknown]
+    [Exp.new(other.class, other), self]
   end
 
   def method
@@ -272,8 +288,10 @@ class Exp
   end
   
   def method_missing(meth, *args, &block)
-    if @type.respond_to?(:method_defined?) and @type.method_defined?(meth) then
+    if @type.respond_to?(:method_defined?) and @type.method_defined?(meth) and @type.method_defined?(:new) then
       @type.new.send(meth, *args)
+    elsif $class_fields[@type.to_s] and $class_fields[@type.to_s].map{|x| x.name.to_s + "="}.include? meth.to_s then
+      self.add_constraint(Exp.new(:bool, Exp.new(:unknown, self, meth.to_s[0..-2]), :==, args.first))
     else
       Exp.new(@type, self, meth, *args)
     end
@@ -284,7 +302,7 @@ class Exp
   end
 
   def to_ary
-    SymbolicArray.new
+    SymbolicArray.new(:array)
   end
   alias :to_a :to_ary
   
@@ -312,7 +330,6 @@ class Exp
     result
   end
 
-  alias :equals :==
   def ==(other)
     if $symbolic_execution then 
       Exp.new(:bool, self, :==, other)
@@ -349,6 +366,9 @@ class Choice < Exp
   end
 
   def add_constraint(constraint)
+    @left = Exp.new(@left.class.to_s, @left) unless @left.is_a? Exp
+    @right = Exp.new(@right.class.to_s, @right) unless @right.is_a? Exp
+
     @left.add_constraint(constraint)
     @right.add_constraint(constraint)
   end

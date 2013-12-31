@@ -1,0 +1,115 @@
+
+.node text {
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+path.link {
+  fill: none;
+  stroke: #9ecae1;
+  stroke-width: 1.5px;
+}
+
+#tabs {
+ width: 1000px;
+ margin-left: auto;
+ margin-right: auto;
+}
+
+/* #chart { */
+/*  float: left; */
+/* } */
+
+#key {
+ float: left;
+ border: 2px solid #3182bd;
+ margin-left: 50px;
+}
+
+
+#popup_box { 
+
+    position:fixed;  
+    _position:absolute; /* hack for internet explorer 6 */  
+    height:600px;  
+    width:400px;  
+    background:#fefefe;  
+    right: 50px;
+    top: 50px;
+    z-index:100; /* Layering ( on-top of others), if you have lots of layers: I just maximized, you can change it yourself */
+    margin-left: 15px;  
+    
+    /* additional features, can be omitted */
+    border:2px solid #666666;      
+    padding:15px;  
+    font-size:15px;  
+    box-shadow: 2px 2px 5px #555555;
+
+    overflow:auto;
+}
+
+/* #chart{ */
+/*   height: 1000px; */
+/*   width: 1000px; */
+/*   overflow-y:scroll; */
+/* } */
+
+#filter_box { 
+
+    position:fixed;  
+    _position:absolute; /* hack for internet explorer 6 */  
+    height:300px;  
+    width:400px;  
+    background:#fefefe;  
+    right: 50px;
+    top: 700px;
+    z-index:100; /* Layering ( on-top of others), if you have lots of layers: I just maximized, you can change it yourself */
+    margin-left: 15px;  
+    
+    /* additional features, can be omitted */
+    border:2px solid #666666;      
+    padding:15px;  
+    font-size:15px;  
+    box-shadow: 2px 2px 5px #555555;
+
+    overflow:auto;
+}
+
+.constraint_box { 
+    background:#ffffff;  
+    z-index:150; /* Layering ( on-top of others), if you have lots of layers: I just maximized, you can change it yourself */
+    margin-left: 15px;  
+    
+    /* additional features, can be omitted */
+    border:2px solid #666666;      
+    padding:15px;  
+    font-size:15px;  
+    box-shadow: 2px 2px 5px #555555;
+
+    /* overflow:auto; */
+
+}
+
+
+.node rect {
+  cursor: pointer;
+  fill: #fff;
+  fill-opacity: .25;
+  stroke: #000000;
+  stroke-width: 0.2px;
+}
+
+.node text {
+  font: 12px sans-serif;
+  pointer-events: none;
+}
+
+path.link {
+  fill: none;
+  stroke: #dddddd;
+  stroke-width: 1.5px;
+}
+
+.constraint {
+    font-size: 12px;
+}

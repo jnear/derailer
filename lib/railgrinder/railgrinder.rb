@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'virtual_keywords'
 require 'set'
+require 'json'
 
 $symbolic_execution = false
 $log = []
@@ -150,9 +151,9 @@ class Graph
 
   def to_json
     if @children == [] then
-      "{\"name\": " + @data.to_s + ", \"open_color\": \"" + @colors[0] + "\", \"closed_color\": \"" + @colors[1] + "\"}\n"
+      "{\"name\": " + JSON.generate(@data.to_s, quirks_mode: true) + ", \"open_color\": \"" + @colors[0] + "\", \"closed_color\": \"" + @colors[1] + "\"}\n"
     else
-      "{\"name\": " + @data.to_s + ",\n" +
+      "{\"name\": " + JSON.generate(@data.to_s, quirks_mode: true) + ",\n" +
         "\"open_color\": \"" + @colors[0] + "\", \"closed_color\": \"" + @colors[1] + "\"," +
         if @open then "\"children\": [\n" else "\"_children\": [\n" end +
         @children.map{|v| v.to_json}.join(",\n") +
@@ -236,9 +237,9 @@ class ConstraintGraph < Graph
 
   def add_child(data, constraints=[])
     if data.is_a? Array then
-      val = "[" + data.map{|x| "\"" + x.to_s.gsub("\"", "\'").delete("\n") + "\""}.join(", ") + "]"
+      val = "[" + data.map{|x| x.to_s.gsub("\"", "\'").delete("\n")}.join(", ") + "]"
     else
-      val = "\"" + data.to_s.gsub("\"", "\'").delete("\n") + "\""
+      val = data.to_s.gsub("\"", "\'").delete("\n")
     end
 
     sym_ex = $symbolic_execution
@@ -263,13 +264,13 @@ class ConstraintGraph < Graph
     if @children == [] then
       if @constraints != [] then
         cs = @constraints.map{|x| "\"" + x + "\""}.join(", ")
-        "{\"name\": " + @data.to_s + 
+        "{\"name\": " + JSON.generate(@data.to_s, quirks_mode: true) + 
           ", \"constraints\": [" + cs + "], \"size\": 1}\n"
       else
-        "{\"name\": " + @data.to_s + ", \"size\": 1}\n"
+        "{\"name\": " + JSON.generate(@data.to_s, quirks_mode: true) + ", \"size\": 1}\n"
       end
     else
-      "{\"name\": " + @data.to_s + ",\n" +
+      "{\"name\": " + JSON.generate(@data.to_s, quirks_mode: true) + ",\n" +
         if @open then "\"children\": [\n" else "\"_children\": [\n" end +
         @children.map{|v| v.to_flare}.join(",\n") +
         "]}\n"
@@ -508,8 +509,16 @@ class Analyzer
 
       $conditions << c
 
-      then_result.add_constraint(c) if then_result
-      else_result.add_constraint(Exp.new(:not, c)) if else_result
+      if then_result
+        then_result = Exp.new(then_result.class.to_s, then_result) unless then_result.is_a? Exp
+        then_result.add_constraint(c)
+      end
+
+      if else_result
+        else_result = Exp.new(else_result.class.to_s, else_result) unless else_result.is_a? Exp
+        else_result.add_constraint(Exp.new(:not, c))
+      end
+
       #Exp.new(:if, c, then_result, else_result)
       log "RESULTS: " + then_result.to_s + ", " + else_result.to_s
       Choice.new(then_result, else_result)
@@ -528,8 +537,8 @@ class Analyzer
     $class_fields = Hash.new
 
     def add_class_field(klass, name, type)
-      # puts "adding class field: " + klass.to_s + ", " + name.to_s + ", " + type.to_s
-      # puts "type of class is : " + klass.class.to_s
+      #puts "adding class field: " + klass.to_s + ", " + name.to_s + ", " + type.to_s
+      #puts "type of class is : " + klass.class.to_s
       field = RailgrinderField.new(name, type)
 
       if $class_fields[klass] then
@@ -547,11 +556,11 @@ class Analyzer
       klass_methods = klass.methods - activerecord_methods
       klass_instance_methods = klass.instance_methods - activerecord_instance_methods
 
-      log "working on class " + klass_name
-      log "methods: "
+      # log "working on class " + klass_name
+      # log "methods: "
 
-      log "originally " + klass.methods.length.to_s + ", reduced to " + klass_methods.length.to_s
-      log "and " + klass.instance_methods.length.to_s + "instance methods, reduced to " + klass_instance_methods.length.to_s
+      # log "originally " + klass.methods.length.to_s + ", reduced to " + klass_methods.length.to_s
+      # log "and " + klass.instance_methods.length.to_s + "instance methods, reduced to " + klass_instance_methods.length.to_s
       # klass_methods.each do |m|
       #   log "  " + m.to_s
       # end
@@ -570,7 +579,7 @@ class Analyzer
       end 
       
       # replace the class with an expression so that all calls to the class methods are expressions
-      log "replacing class definitions"
+      # log "replacing class definitions"
       new_klass = Exp.new(klass_name, klass_name)
       new_klass.send(:define_method, :controller_name, lambda { klass_name })
 
@@ -590,8 +599,13 @@ class Analyzer
                                  })
       end
 
-      log "has photos_from? " + new_klass.respond_to?(:photos_from).to_s
-      log "has photos_from? in thingy " + klass_instance_methods.map{|x| x.to_s}.include?('photos_from').to_s
+
+      # THIS IS FOR THE BIIIIIIIIIIIIG OVERSIGHT
+      # an EXP needs to ask in method_missing:
+      #  is this method defined in my "type"'s CLASS DEFN
+      # and if so, run that instead of producing an exp
+      # log "has photos_from? " + new_klass.respond_to?(:photos_from).to_s
+      # log "has photos_from? in thingy " + klass_instance_methods.map{|x| x.to_s}.include?('photos_from').to_s
 
       #replace_defs(klass, new_klass)
 
@@ -632,9 +646,14 @@ class Analyzer
       end
 
       request = ActionController::TestRequest.new
-      env = SymbolicArray.new
+      request.metaclass.send(:define_method, :accept, proc { "text/html" })
+      request.metaclass.send(:define_method, :formats, proc { [Mime::HTML] })
+      env = SymbolicArray.new(:env)
       ActionController::TestRequest.send(:define_method, :env, proc { env })
       controller.send(:define_method, :request, proc {request})
+
+      my_session = SymbolicArray.new(:session)
+      controller.send(:define_method, :session, proc {my_session})
 
       # [:request].each do |v|
       #   controller.send(:define_method, v, proc {Exp.new(v, v)})
@@ -646,11 +665,15 @@ class Analyzer
       controller.send(:define_method, :authenticate_user, proc { @user = current_user; @current_user = current_user })
       controller.send(:define_method, :user_signed_in?, proc { current_user.signed_in? })
 
-      my_params = SymbolicArray.new
+      my_params = SymbolicArray.new(:params)
       controller.send(:define_method, :params, proc {my_params})
       controller.send(:define_method, :action_name, proc {action.to_s.dup})
       controller.send(:define_method, :redirect_to, lambda {|*args| raise UnreachableException })
       controller.send(:define_method, :assert_is_devise_resource!, proc { log "Assertion..."})
+      controller.send(:define_method, :assert_is_devise_resource!, proc { log "Assertion..."})
+
+      # to make sure rendering runs in rails 4
+      controller.send(:define_method, :performed?, proc { false })
 
       # todo: spec the rest of these
       if defined? CanCan then
@@ -677,6 +700,28 @@ class Analyzer
                                             log "called url_for"
                                             ""
                                           })
+      
+      ActionView::Helpers::FormHelper.send(:define_method, :form_for,
+                                          lambda{|*args|
+                                            log "called form_for"
+                                            ""
+                                           })
+
+      ActionView::Helpers::TextHelper.send(:define_method, :simple_format,
+                                           lambda{|arg|
+                                             log "called simple_format"
+                                             arg.to_s # this will trigger inclusion if we're rendering
+                                           })
+
+
+      if defined? ClientSideValidations then
+        ClientSideValidations::ActionView::Helpers::FormHelper.send(:define_method, :form_for,
+                                                                    lambda{|*args|
+                                                                      log "called form_for validator"
+                                                                      ""
+                                                                    })
+      end
+
 
       ActionView::Helpers.send(:define_method, :raw, lambda{|arg|
                                  a = flatten_exp(arg)
@@ -726,7 +771,12 @@ class Analyzer
                         $track_to_s = false
                       })
 
+      # ActionView::Template.send(:define_method, :render, lambda{|*args|
+      #                             log "CALLED THE NEW FUCKER!!!!!!!!!!!!!!"
+      #                           })
+
       ActionController::Rendering.send(:define_method, :render, lambda{|*args|
+                                         log "RENDERING NOT TO BODY"
                                          begin
                                            super(*args)
                                            self.content_type ||= Mime[lookup_context.rendered_format].to_s
@@ -747,6 +797,7 @@ class Analyzer
       $symbolic_execution = true
       r = p.send(:process_action, action)
       $symbolic_execution = sym_ex
+      puts "THE RESPONSE IS " + r.class.to_s
 
       vars_after = p.instance_variables
 
@@ -782,11 +833,19 @@ class Analyzer
 
     results = Hash.new
     controller_klasses = ActionController::Base.descendants
-    # controller_klasses = [PeopleController] # remove
+    #controller_klasses = [NotesController] # remove
+    log "here are the controllers and their actions that I know of"
+
+    controller_klasses.each do |c|
+      log " "
+      log c
+      log c.action_methods.map{|x| x.to_s}.join(", ")
+    end
+      
     controller_klasses.each do |controller|
       controller.action_methods.each do |action|
 
-        # next unless action.to_s == "index" # remove
+        #next unless action.to_s == "show" # remove
 
         puts "EEE " + action.to_s
         begin
@@ -799,7 +858,7 @@ class Analyzer
         rescue Exception => e
           log "ERROR: couldn't do this one: " + e.to_s
           e.backtrace.each do |line|
-            log "ERROR: " + line.to_s
+            puts "ERROR: " + line.to_s
           end
         end
       end
@@ -817,7 +876,7 @@ class Analyzer
     graph = Graph.new("ActiveRecord", colors=["#536F05", "#536F05"])
     graph2 = Graph.new("ActionController", colors=["#536F05", "#536F05"])
     graph3 = Graph.new("ActiveRecord", colors=["#536F05", "#536F05"])
-    graph4 = ConstraintGraph.new("\"\"")
+    graph4 = ConstraintGraph.new("ActiveRecord")
 
     results.each_pair do |controller_action, values|
       controller, action = controller_action.split("/")
@@ -967,24 +1026,31 @@ class Analyzer
 
     log ''
 
-    
-    log "Starting web server..."
-    log "When it's done, please browse to http://localhost:8000"
-    log ""
+    # wtf ruby
+    $graph = graph
 
-    require 'webrick'
-    root = File.expand_path(File.dirname(__FILE__) + '/viz/')
-    cb = lambda do |req, res| 
-      req.query[:graph_string] = graph.to_s
-      req.query[:rails_root] = Rails.root.to_s
-      req.query[:log] = $log
+    def start_web_server
+      log "Starting web server..."
+      log "When it's done, please browse to http://localhost:8000"
+      log ""
+
+      require 'webrick'
+      root = File.expand_path(File.dirname(__FILE__) + '/viz/')
+      cb = lambda do |req, res| 
+        req.query[:graph_string] = $graph.to_s
+        req.query[:rails_root] = Rails.root.to_s
+        req.query[:log] = $log
+      end
+
+      WEBrick::HTTPUtils::DefaultMimeTypes['rhtml'] = 'text/html'
+      server = WEBrick::HTTPServer.new :Port => 8000, :DocumentRoot => root, :RequestCallback => cb
+
+      trap 'INT' do server.shutdown end
+
+      server.start
     end
-    server = WEBrick::HTTPServer.new :Port => 8000, :DocumentRoot => root, :MimeTypes => {'rhtml' => 'text/html'}, :RequestCallback => cb
-
-    trap 'INT' do server.shutdown end
-
-    server.start
-
+    
+    start_web_server
     log ""
     log "All done!"
   end
