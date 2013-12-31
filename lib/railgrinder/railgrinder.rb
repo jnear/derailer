@@ -2,6 +2,43 @@ require 'rubygems'
 require 'virtual_keywords'
 require 'set'
 require 'json'
+require 'sdg_utils/lambda/sourcerer'
+
+
+
+def instr_src(proc)
+  ast = SDGUtils::Lambda::Sourcerer.parse_string(proc.source)
+  return ["", ""] unless ast
+  orig_src = SDGUtils::Lambda::Sourcerer.read_src(ast)
+  instr_src = SDGUtils::Lambda::Sourcerer.reprint(ast) do |node, parent, anno|
+    new_src =
+      case node.type
+      when :if
+          cond_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[0], anno)
+          then_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[1], anno)
+          else_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[2], anno)
+          if else_src.empty?
+            "Arby::Ast::Expr::BinaryExpr.implies(" +
+              "#{cond_src}, proc{#{then_src}}) "
+          else
+            "Arby::Ast::Expr::ITEExpr.new(" +
+              "#{cond_src}, " +
+              "proc{#{then_src}}, " +
+              "proc{#{else_src}})"
+          end
+      when :and, :or
+          lhs_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[0], anno)
+          rhs_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[1], anno)
+          "Arby::Ast::Expr::BinaryExpr.#{node.type}(" +
+            "proc{#{lhs_src}}, " +
+            "proc{#{rhs_src}})"
+      else
+        nil
+      end
+  end
+  [orig_src, instr_src]
+end
+
 
 $symbolic_execution = false
 $log = []
@@ -454,7 +491,8 @@ class Analyzer
     $conditions = []
     $ifs = 0
     log "Initializing keyword virtualizers"
-    controller_virtualizer = VirtualKeywords::Virtualizer.new(:for_subclasses_of => [ActionController::Base, ActionView::Template, 
+    # ActionController::Base
+    controller_virtualizer = VirtualKeywords::Virtualizer.new(:for_subclasses_of => [ ActionView::Template, 
                                                                                      ActionView::CompiledTemplates, ActionView::Base])
 
     controller_virtualizer.virtual_if do |condition, then_do, else_do|
@@ -530,6 +568,27 @@ class Analyzer
     require File.expand_path(File.dirname(__FILE__) + '/alloy_translation')
 
     log "done."
+
+    # ********************************************************************************
+
+#    puts UsersController.methods - ApplicationController.methods
+    
+    puts "HERE WE GO"
+    puts UsersController.instance_method(:show)
+    #binding.pry
+    puts UsersController.instance_method(:show).source
+    r = instr_src(UsersController.instance_method(:show))
+
+    puts r
+
+    UsersController.class_eval(r[1])
+
+    #puts UsersController.instance_method(:show).source
+    
+    #abort
+    
+
+
 
     # ********************************************************************************
 
