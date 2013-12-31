@@ -458,7 +458,7 @@ class Analyzer
                                                                                      ActionView::CompiledTemplates, ActionView::Base])
 
     controller_virtualizer.virtual_if do |condition, then_do, else_do|
-      puts "HFUCKER! IN IF"
+      puts "IN IF"
       $ifs = $ifs + 1
       redirect = false
       
