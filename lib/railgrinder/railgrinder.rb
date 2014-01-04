@@ -6,8 +6,8 @@ require 'sdg_utils/lambda/sourcerer'
 
 
 
-def instr_src(proc)
-  ast = SDGUtils::Lambda::Sourcerer.parse_string(proc.source)
+def instr_src(src)
+  ast = SDGUtils::Lambda::Sourcerer.parse_string(src)
   return "" unless ast
   orig_src = SDGUtils::Lambda::Sourcerer.read_src(ast)
   instr_src = SDGUtils::Lambda::Sourcerer.reprint(ast) do |node, parent, anno|
@@ -32,6 +32,7 @@ def instr_src(proc)
           "Arby::Ast::Expr::BinaryExpr.#{node.type}(" +
             "proc{#{lhs_src}}, " +
             "proc{#{rhs_src}})"
+        nil # to prevent and, or
       else
         nil
       end
@@ -579,7 +580,7 @@ class Analyzer
         #puts klass.instance_method(m).source
 
         begin
-          new_src = instr_src(klass.instance_method(m))
+          new_src = instr_src(klass.instance_method(m).source)
           #puts new_src
           klass.class_eval(new_src)
         rescue => msg  
@@ -827,6 +828,14 @@ class Analyzer
       #   end
       # end
 
+      
+      old_template_handler = ActionView::Template::Handlers::ERB.instance_method(:call)
+      ActionView::Template::Handlers::ERB.send(:define_method, :call, lambda{|*args|
+                                                 log "instrumenting template code"
+                                                 src = old_template_handler.bind(self).call(*args)
+                                                 instr_src(src)
+                                               })
+
       old_render = controller.instance_method(:render_to_body)
       controller.send(:define_method, :render_to_body, lambda{|*args|
                         log "RENDERING"
@@ -905,7 +914,7 @@ class Analyzer
 
     results = Hash.new
     controller_klasses = ActionController::Base.descendants
-    #controller_klasses = [NotesController] # remove
+    controller_klasses = [UsersController] # remove
     log "here are the controllers and their actions that I know of"
 
     controller_klasses.each do |c|
@@ -917,7 +926,7 @@ class Analyzer
     controller_klasses.each do |controller|
       controller.action_methods.each do |action|
 
-        #next unless action.to_s == "show" # remove
+        next unless action.to_s == "show" # remove
 
         puts "EEE " + action.to_s
         begin
