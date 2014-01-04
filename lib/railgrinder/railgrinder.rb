@@ -442,6 +442,9 @@ class Analyzer
     Dir.glob(Rails.root.to_s + '/app/controllers/**/*.rb').each { |file| my_load_file(file) }
     controller_klasses = ActionController::Base.descendants
 
+    #Dir.glob(Rails.root.to_s + '/app/helpers/**/*.rb').each { |file| my_load_file(file) }
+
+
     log "Done loading files."
 
     def get_instance_vars(binding)
@@ -570,30 +573,37 @@ class Analyzer
     extraneous_methods = ActionController::Base.methods
     extraneous_instance_methods = ActionController::Base.instance_methods    
 
+    def instr_meth(klass, m)
+      begin
+        new_src = instr_src(klass.instance_method(m).source)
+        puts new_src
+        klass.class_eval(new_src)
+      rescue => msg  
+        #log "    ERROR: Something went wrong ("+msg.to_s+")"  
+        log "    ERROR: Failed to instrument " + klass.to_s + "." + m.to_s
+      end 
+    end
+
     controller_klasses.each do |klass|
       puts klass
       (klass.methods - extraneous_methods).each do |m|
         puts "  " + m.to_s
       end
+      
+
+      mod = klass._helpers
+      mod.instance_methods.each do |m|
+        puts m
+        instr_meth(mod, m)
+      end
+
       (klass.instance_methods(false) - extraneous_instance_methods).each do |m|
         puts "  " + m.to_s
         #puts klass.instance_method(m).source
 
-        begin
-          new_src = instr_src(klass.instance_method(m).source)
-          #puts new_src
-          klass.class_eval(new_src)
-        rescue => msg  
-          #log "    ERROR: Something went wrong ("+msg.to_s+")"  
-          log "    ERROR: Failed to instrument " + klass.to_s + "." + m.to_s
-        end 
-
+        instr_meth(klass, m)
       end
     end
-
-    
-
-#    abort
 
     log "Loading class redefinitions..."
     require File.expand_path(File.dirname(__FILE__) + '/class_redefinitions')
@@ -927,7 +937,7 @@ class Analyzer
       controller.action_methods.each do |action|
 
         next unless action.to_s == "show" # remove
-
+        
         puts "EEE " + action.to_s
         begin
           log "START"
