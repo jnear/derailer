@@ -8,7 +8,7 @@ require 'sdg_utils/lambda/sourcerer'
 
 def instr_src(proc)
   ast = SDGUtils::Lambda::Sourcerer.parse_string(proc.source)
-  return ["", ""] unless ast
+  return "" unless ast
   orig_src = SDGUtils::Lambda::Sourcerer.read_src(ast)
   instr_src = SDGUtils::Lambda::Sourcerer.reprint(ast) do |node, parent, anno|
     new_src =
@@ -18,13 +18,13 @@ def instr_src(proc)
           then_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[1], anno)
           else_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[2], anno)
           if else_src.empty?
-            "Arby::Ast::Expr::BinaryExpr.implies(" +
-              "#{cond_src}, proc{#{then_src}}) "
+            "$analyzer.railgrinder_if(" +
+              "lambda{#{cond_src}}, lambda{#{then_src}}, lambda{}) "
           else
-            "Arby::Ast::Expr::ITEExpr.new(" +
-              "#{cond_src}, " +
-              "proc{#{then_src}}, " +
-              "proc{#{else_src}})"
+            "$analyzer.railgrinder_if(" +
+              "lambda{#{cond_src}}, " +
+              "lambda{#{then_src}}, " +
+              "lambda{#{else_src}})"
           end
       when :and, :or
           lhs_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[0], anno)
@@ -36,7 +36,7 @@ def instr_src(proc)
         nil
       end
   end
-  [orig_src, instr_src]
+  instr_src
 end
 
 
@@ -492,10 +492,10 @@ class Analyzer
     $ifs = 0
     log "Initializing keyword virtualizers"
     # ActionController::Base
-    controller_virtualizer = VirtualKeywords::Virtualizer.new(:for_subclasses_of => [ ActionView::Template, 
-                                                                                     ActionView::CompiledTemplates, ActionView::Base])
+    # controller_virtualizer = VirtualKeywords::Virtualizer.new(:for_subclasses_of => [ ActionView::Template, 
+    #                                                                                  ActionView::CompiledTemplates, ActionView::Base])
 
-    controller_virtualizer.virtual_if do |condition, then_do, else_do|
+    def railgrinder_if(condition, then_do, else_do)
       puts "IN IF now"
       $ifs = $ifs + 1
       redirect = false
@@ -563,31 +563,42 @@ class Analyzer
     end
 
 
+    log "Instrumenting Controller and Model code"
+
+    controller_klasses = ActionController::Base.descendants
+    extraneous_methods = ActionController::Base.methods
+    extraneous_instance_methods = ActionController::Base.instance_methods    
+
+    controller_klasses.each do |klass|
+      puts klass
+      (klass.methods - extraneous_methods).each do |m|
+        puts "  " + m.to_s
+      end
+      (klass.instance_methods(false) - extraneous_instance_methods).each do |m|
+        puts "  " + m.to_s
+        #puts klass.instance_method(m).source
+
+        begin
+          new_src = instr_src(klass.instance_method(m))
+          #puts new_src
+          klass.class_eval(new_src)
+        rescue => msg  
+          #log "    ERROR: Something went wrong ("+msg.to_s+")"  
+          log "    ERROR: Failed to instrument " + klass.to_s + "." + m.to_s
+        end 
+
+      end
+    end
+
+    
+
+#    abort
+
     log "Loading class redefinitions..."
     require File.expand_path(File.dirname(__FILE__) + '/class_redefinitions')
     require File.expand_path(File.dirname(__FILE__) + '/alloy_translation')
 
     log "done."
-
-    # ********************************************************************************
-
-#    puts UsersController.methods - ApplicationController.methods
-    
-    puts "HERE WE GO"
-    puts UsersController.instance_method(:show)
-    #binding.pry
-    puts UsersController.instance_method(:show).source
-    r = instr_src(UsersController.instance_method(:show))
-
-    puts r
-
-    UsersController.class_eval(r[1])
-
-    #puts UsersController.instance_method(:show).source
-    
-    #abort
-    
-
 
 
     # ********************************************************************************
@@ -675,6 +686,8 @@ class Analyzer
         Object.const_set(klass.to_s, new_klass)
       end
     end
+
+
 
 
     #special for bluecloth
@@ -824,8 +837,8 @@ class Analyzer
                           log "  RENDERING SUCCESSFUL"
                         rescue Exception => e
                           log "  RENDERING EXCEPTION: " + e.to_s
-                          puts " TRACE"
-                          puts e.backtrace.join("\n")
+                          #puts " TRACE"
+                          #puts e.backtrace.join("\n")
                         end
                         $track_to_s = false
                       })
@@ -1102,7 +1115,7 @@ class Analyzer
       end
 
       WEBrick::HTTPUtils::DefaultMimeTypes['rhtml'] = 'text/html'
-      server = WEBrick::HTTPServer.new :Port => 8000, :DocumentRoot => root, :RequestCallback => cb
+      server = WEBrick::HTTPServer.new :Port => 8001, :DocumentRoot => root, :RequestCallback => cb
 
       trap 'INT' do server.shutdown end
 
