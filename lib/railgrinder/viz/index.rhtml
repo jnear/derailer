@@ -42,7 +42,7 @@
 	  console.log(this);
     var parentPanel = elem.data('clampedwidth');
     var resizeFn = function () {
-        var sideBarNavWidth = $(parentPanel).width() + 60 - parseInt(elem.css('paddingLeft')) - parseInt(elem.css('paddingRight')) - parseInt(elem.css('marginLeft')) - parseInt(elem.css('marginRight')) - parseInt(elem.css('borderLeftWidth')) - parseInt(elem.css('borderRightWidth'));
+        var sideBarNavWidth = $(parentPanel).width() + 20;
         elem.css('width', sideBarNavWidth);
     };
 
