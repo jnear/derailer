@@ -34,6 +34,24 @@
 
 	<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 	<script type="text/javascript" src="js/derailer.js"></script>
+	<script type="text/javascript">
+	  $(document).ready(function () {
+  setTimeout(function () {
+  $('[data-clampedwidth]').each(function () {
+    var elem = $(this);
+	  console.log(this);
+    var parentPanel = elem.data('clampedwidth');
+    var resizeFn = function () {
+        var sideBarNavWidth = $(parentPanel).width() + 60 - parseInt(elem.css('paddingLeft')) - parseInt(elem.css('paddingRight')) - parseInt(elem.css('marginLeft')) - parseInt(elem.css('marginRight')) - parseInt(elem.css('borderLeftWidth')) - parseInt(elem.css('borderRightWidth'));
+        elem.css('width', sideBarNavWidth);
+    };
+
+    resizeFn();
+    $(window).resize(resizeFn);
+});
+  }, 100)
+});
+    </script>
 </head>
 
 <body>
@@ -48,6 +66,7 @@
 	    
 	  </div>
 	  <div class="col-md-4 column">
+	    <div class="container" data-clampedwidth=".col-md-4" data-spy="affix">
 	    <div class="panel panel-default">
 	      <div class="panel-heading">
 		<h3 class="panel-title" id="popup_box_header">
@@ -68,6 +87,7 @@
 	      <div class="panel-body" ondrop="drop(event)" ondragover="allowDrop(event)">
 	      </div>
 	      <div class="panel-footer">
+	      </div>
 	      </div>
 	    </div>
 	  </div>
