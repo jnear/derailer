@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'virtual_keywords'
+#require 'virtual_keywords'
 require 'set'
 require 'json'
 require 'sdg_utils/lambda/sourcerer'
@@ -1141,7 +1141,7 @@ class Analyzer
       server.start
     end
     
-    start_web_server
+    #start_web_server
     log ""
     log "All done!"
   end
