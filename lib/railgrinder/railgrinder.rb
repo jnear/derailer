@@ -578,6 +578,8 @@ class Analyzer
         new_src = instr_src(klass.instance_method(m).source)
         puts new_src
         klass.class_eval(new_src)
+      rescue SyntaxError => se
+        log "   Error: Failed to eval code for " + klass.to_s + "." + m.to_s
       rescue => msg  
         #log "    ERROR: Something went wrong ("+msg.to_s+")"  
         log "    ERROR: Failed to instrument " + klass.to_s + "." + m.to_s
