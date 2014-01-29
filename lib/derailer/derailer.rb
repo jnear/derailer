@@ -55,7 +55,7 @@ def without_symbolic(&block)
   $symbolic_execution = sym
 end
 
-log "LOADING RAILGRINDER ********************************************************************************"
+log "LOADING DERAILER ********************************************************************************"
 
 class Object
   def metaclass
