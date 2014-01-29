@@ -10,9 +10,10 @@ unintended data flows that may represent security bugs.
 
 Add these lines to your application's Gemfile:
 
-    gem 'sourcify', :git => "git://github.com/jnear/sourcify.git"
-    gem 'virtual_keywords', :git => "git://github.com/jnear/virtual_keywords.git"
-    gem 'derailer', :git => "git://github.com/jnear/derailer.git"
+  gem 'railgrinder', :git => 'https://github.com/jnear/railgrinder.git'
+  gem 'method_source', "~>0.8.3",
+      :git => 'https://github.com/aleksandarmilicevic/method_source.git'
+  gem 'sdg_utils', :git => 'https://github.com/jnear/sdg_utils.git'
 
 And then execute:
 
