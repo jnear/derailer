@@ -1,6 +1,6 @@
-desc 'run Railgrinder analysis'
-task :railgrinder do
-  require 'railgrinder/railgrinder'
+desc 'run Derailer analysis'
+task :derailer do
+  require 'derailer/derailer'
   
   RubiconAnalysis.new do
     rails_path Rails.root

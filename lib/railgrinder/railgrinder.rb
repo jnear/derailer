@@ -18,10 +18,10 @@ def instr_src(src)
           then_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[1], anno)
           else_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[2], anno)
           if else_src.empty?
-            "$analyzer.railgrinder_if(" +
+            "$analyzer.derailer_if(" +
               "lambda{#{cond_src}}, lambda{#{then_src}}, lambda{}) "
           else
-            "$analyzer.railgrinder_if(" +
+            "$analyzer.derailer_if(" +
               "lambda{#{cond_src}}, " +
               "lambda{#{then_src}}, " +
               "lambda{#{else_src}})"
@@ -65,7 +65,7 @@ class Object
   end
 end
 
-RailgrinderField = Struct.new(:name, :type)
+DerailerField = Struct.new(:name, :type)
 
 $all_vcs = Hash.new
 def add_vcs(controller, action, vc)
@@ -499,7 +499,7 @@ class Analyzer
     # controller_virtualizer = VirtualKeywords::Virtualizer.new(:for_subclasses_of => [ ActionView::Template, 
     #                                                                                  ActionView::CompiledTemplates, ActionView::Base])
 
-    def railgrinder_if(condition, then_do, else_do)
+    def derailer_if(condition, then_do, else_do)
       puts "IN IF now"
       $ifs = $ifs + 1
       redirect = false
@@ -622,7 +622,7 @@ class Analyzer
     def add_class_field(klass, name, type)
       #puts "adding class field: " + klass.to_s + ", " + name.to_s + ", " + type.to_s
       #puts "type of class is : " + klass.class.to_s
-      field = RailgrinderField.new(name, type)
+      field = DerailerField.new(name, type)
 
       if $class_fields[klass] then
         $class_fields[klass] << field

@@ -1,11 +1,11 @@
-#require 'railgrinder'
+#require 'derailer'
 require 'rails'
-module Railgrinder
+module Derailer
   class Railtie < Rails::Railtie
-    railtie_name :railgrinder
+    railtie_name :derailer
 
     rake_tasks do
-      load "tasks/railgrinder.rake"
+      load "tasks/derailer.rake"
     end
   end
 end

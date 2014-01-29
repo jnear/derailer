@@ -1,6 +1,6 @@
-# Railgrinder
+# Derailer
 
-Railgrinder is a static analysis tool for Rails applications. It
+Derailer is a static analysis tool for Rails applications. It
 produces a graph showing the conditions under which your application
 allows data to flow from the database to rendered web pages seen by
 users. The goal is for this graph to aid the user in discovering
@@ -12,7 +12,7 @@ Add these lines to your application's Gemfile:
 
     gem 'sourcify', :git => "git://github.com/jnear/sourcify.git"
     gem 'virtual_keywords', :git => "git://github.com/jnear/virtual_keywords.git"
-    gem 'railgrinder', :git => "git://github.com/jnear/railgrinder.git"
+    gem 'derailer', :git => "git://github.com/jnear/derailer.git"
 
 And then execute:
 
@@ -22,7 +22,7 @@ And then execute:
 
 To run the analysis, execute:
 
-    $ bundle exec rake railgrinder
+    $ bundle exec rake derailer
 
 Once it's finished, it will start a webserver. To see the analysis
 results, browse to:

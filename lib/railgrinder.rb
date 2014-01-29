@@ -1,9 +1,9 @@
-require "railgrinder/version"
-#require "railgrinder/railgrinder"
+require "derailer/version"
+#require "derailer/derailer"
 
-require 'railgrinder/railtie' if defined?(Rails)
+require 'derailer/railtie' if defined?(Rails)
 
 
-# module Railgrinder
+# module Derailer
 #   # Your code goes here...
 # end

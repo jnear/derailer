@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'railgrinder/version'
+require 'derailer/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "railgrinder"
-  spec.version       = Railgrinder::VERSION
+  spec.name          = "derailer"
+  spec.version       = Derailer::VERSION
   spec.authors       = ["Joseph Near"]
   spec.email         = ["jnear@csail.mit.edu"]
   spec.description   = "Static analysis for Rails applications"
