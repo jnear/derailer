@@ -449,7 +449,6 @@ class String
   alias :old_equals :==
   def ==(other)
     if other.is_a? String and (self.starts_with? "Exp" or other.starts_with? "Exp") then
-      puts "HAHAHA WE ARE DOING IT BHICHTES"
       Exp.new(:bool, :==, self, other)
     else
       old_equals(other)

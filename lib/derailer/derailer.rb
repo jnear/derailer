@@ -29,10 +29,10 @@ def instr_src(src)
       when :and, :or
           lhs_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[0], anno)
           rhs_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[1], anno)
-          "Arby::Ast::Expr::BinaryExpr.#{node.type}(" +
-            "proc{#{lhs_src}}, " +
-            "proc{#{rhs_src}})"
-        nil # to prevent and, or
+        src = "$analyzer.derailer_and_or(:#{node.type}, " +
+          "lambda{#{lhs_src}}, lambda{#{rhs_src}})"
+        #puts "NEW SRC " + final.to_s
+        src
       else
         nil
       end
@@ -301,9 +301,10 @@ class ConstraintGraph < Graph
   def to_flare
     if @children == [] then
       if @constraints != [] then
-        cs = @constraints.map{|x| "\"" + x + "\""}.join(", ")
+        #cs = @constraints.join(", ")
+        cs = @constraints.map{|x| JSON.generate(x, quirks_mode: true)}.join(", ")
         "{\"name\": " + JSON.generate(@data.to_s, quirks_mode: true) + 
-          ", \"constraints\": [" + JSON.generate(cs, quirks_mode: true) + "], \"size\": 1}\n"
+          ", \"constraints\": [" + cs + "], \"size\": 1}\n"
       else
         "{\"name\": " + JSON.generate(@data.to_s, quirks_mode: true) + ", \"size\": 1}\n"
       end
@@ -492,6 +493,25 @@ class Analyzer
       end
     end
 
+
+    def derailer_and_or(typ, lhs, rhs)
+      lhs_result = lhs.call
+
+      if lhs_result.is_a? Exp then
+        rhs_result = rhs.call
+        result = Exp.new(:bool, lhs_result, typ, rhs_result)
+        puts "SRC RESULTING " + result.to_s
+        result
+      else # non-symbolic
+        case typ
+        when :or
+            if lhs_result then lhs_result else rhs.call end
+        when :and
+            if lhs_result then rhs.call else false end
+        end
+      end
+    end
+
     $conditions = []
     $ifs = 0
     log "Initializing keyword virtualizers"
@@ -576,10 +596,11 @@ class Analyzer
     def instr_meth(klass, m)
       begin
         new_src = instr_src(klass.instance_method(m).source)
-        puts new_src
+        #puts new_src
         klass.class_eval(new_src)
       rescue SyntaxError => se
         log "   Error: Failed to eval code for " + klass.to_s + "." + m.to_s
+        log "    Code is: " + new_src.to_s
       rescue => msg  
         #log "    ERROR: Something went wrong ("+msg.to_s+")"  
         log "    ERROR: Failed to instrument " + klass.to_s + "." + m.to_s
@@ -749,6 +770,8 @@ class Analyzer
       # this is specific...
       controller.send(:define_method, :authenticate_user, proc { @user = current_user; @current_user = current_user })
       controller.send(:define_method, :user_signed_in?, proc { current_user.signed_in? })
+
+      controller.send(:define_method, :current_user, proc { @current_user = current_user })
 
       my_params = SymbolicArray.new(:params)
       controller.send(:define_method, :params, proc {my_params})
@@ -926,7 +949,7 @@ class Analyzer
 
     results = Hash.new
     controller_klasses = ActionController::Base.descendants
-    #controller_klasses = [UsersController] # remove
+    #controller_klasses = [NotesController] # remove
     log "here are the controllers and their actions that I know of"
 
     controller_klasses.each do |c|
@@ -1136,7 +1159,7 @@ class Analyzer
       end
 
       WEBrick::HTTPUtils::DefaultMimeTypes['rhtml'] = 'text/html'
-      server = WEBrick::HTTPServer.new :Port => 8000, :DocumentRoot => root, :RequestCallback => cb
+      server = WEBrick::HTTPServer.new :Port => 8001, :DocumentRoot => root, :RequestCallback => cb
 
       trap 'INT' do server.shutdown end
 

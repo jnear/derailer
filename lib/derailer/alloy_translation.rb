@@ -106,7 +106,7 @@ class Exp
         b = args.shift
         c = args.shift
         # binary ops
-        if [:+, :-, :implies, :==].include? b then
+        if [:+, :-, :implies, :==, :and, :or].include? b then
           a.to_alloy + " " + b.to_s + " " + c.to_alloy
         elsif b == :query then
           name = a.to_alloy.downcase
