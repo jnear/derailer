@@ -17,18 +17,19 @@ def instr_src(src)
           cond_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[0], anno)
           then_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[1], anno)
           else_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[2], anno)
+          prepend = "(#{cond_src}); "
           if else_src.empty?
-            "$analyzer.derailer_if(" +
+            prepend + "$analyzer.derailer_if(" +
               "lambda{#{cond_src}}, lambda{#{then_src}}, lambda{}) "
           else
-            "$analyzer.derailer_if(" +
+            prepend + "$analyzer.derailer_if(" +
               "lambda{#{cond_src}}, " +
               "lambda{#{then_src}}, " +
               "lambda{#{else_src}})"
           end
       when :and, :or
           lhs_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[0], anno)
-          rhs_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[1], anno)
+        rhs_src = SDGUtils::Lambda::Sourcerer.compute_src(node.children[1], anno)
         src = "$analyzer.derailer_and_or(:#{node.type}, " +
           "lambda{#{lhs_src}}, lambda{#{rhs_src}})"
         #puts "NEW SRC " + final.to_s
@@ -560,6 +561,7 @@ class Analyzer
       if redirect then
         $path_constraints << redirect
         log "ADDING REDIRECT: " + redirect.to_s
+        log "IVARS: " + ivars_end.to_s
         # ivars_end.each_pair do |var, val|
         #   if val.is_a? Exp then
         #     val.add_constraint(redirect)
@@ -739,6 +741,7 @@ class Analyzer
       $to_s_exps = []
       $callback_conditions = []
       $path_constraints = []
+      $saves = []
 
       p = controller.new
 
@@ -771,7 +774,8 @@ class Analyzer
       controller.send(:define_method, :authenticate_user, proc { @user = current_user; @current_user = current_user })
       controller.send(:define_method, :user_signed_in?, proc { current_user.signed_in? })
 
-      controller.send(:define_method, :current_user, proc { @current_user = current_user })
+      controller.send(:define_method, :current_user, proc { puts "setting current user" ; @current_user = current_user })
+      p.instance_variable_set(:@current_user, current_user)
 
       my_params = SymbolicArray.new(:params)
       controller.send(:define_method, :params, proc {my_params})
@@ -920,6 +924,8 @@ class Analyzer
       assign_vars = vars_after.select{|x| ! x.to_s.start_with? "@_"}
       assign_vals = assign_vars.map{|v| p.instance_variable_get(v)}
 
+
+
       $to_s_exps.each do |e|
           if e.is_a? Exp then
             $path_constraints.each do |c|
@@ -944,12 +950,19 @@ class Analyzer
         consolidate_constraints(e)
       end
 
-      $to_s_exps
+      $saves = $saves.map{|e| flatten_exp(e)}.flatten(1)
+      $saves.each do |e|
+        consolidate_constraints(e)
+        puts "save is " + e.to_s + " and its updates are " + e.updates.to_s
+      end
+
+      [$to_s_exps, $saves]
     end
 
     results = Hash.new
+    saves = Hash.new
     controller_klasses = ActionController::Base.descendants
-    #controller_klasses = [NotesController] # remove
+    controller_klasses = [PermissionsController] # remove
     log "here are the controllers and their actions that I know of"
 
     controller_klasses.each do |c|
@@ -961,13 +974,14 @@ class Analyzer
     controller_klasses.each do |controller|
       controller.action_methods.each do |action|
 
-        #next unless action.to_s == "show" # remove
+        next unless action.to_s == "save" # remove
         
         puts "EEE " + action.to_s
         begin
           log "START"
-          assign_vals = test_one_action(controller, action)
+          assign_vals, assign_saves = test_one_action(controller, action)
           results[controller.to_s + "/" + action.to_s] = assign_vals if assign_vals != []
+          saves[controller.to_s + "/" + action.to_s] = assign_saves if assign_saves != []
         rescue UnreachableException => e
           log "UNREACHABLE"
           # unreachable...do nothing
@@ -1013,6 +1027,26 @@ class Analyzer
       end
     end
 
+
+    saves_graph = ConstraintGraph.new("ActiveRecord")
+    saves.each_pair do |controller_action, values|
+      next if values == nil
+      controller, action = controller_action.split("/")
+      trans_vc = []
+
+      values.each do |v|
+        begin
+          translated = v.to_alloy
+          constraints = v.constraints.map{|c| c.to_alloy}
+          puts "v is " + v.to_s + " and it supdates are " + v.updates.to_s
+          updates = "(" + v.updates.map{|x| x.to_alloy}.join(", ") + ")"
+          add_node_4(saves_graph, v.type.to_s, translated + updates, constraints, controller, action)
+        rescue => msg
+          log "ERROR: couldn't translate " + v.to_s
+          log "problem: " + msg.to_s
+        end
+      end
+    end
     
 
     # log "CONDITIONS ********************************************************************************"
@@ -1038,6 +1072,11 @@ class Analyzer
     end
 
     log graph4.to_s
+
+
+    File.open(File.expand_path(File.dirname(__FILE__) + '/viz/saves.json'), 'w') do |file| 
+      file.write saves_graph.to_flare
+    end
 
     log ''
     log "Graph depth: " + graph.depth.to_s

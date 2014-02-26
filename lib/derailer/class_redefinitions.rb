@@ -187,6 +187,7 @@ def flatten_exp(e)
     possibilities.map do |a|
       new_e = Exp.new(e.type, *a)
       e.constraints.each {|c| new_e.add_constraint(c)}
+      new_e.set_updates(e.updates)
       new_e
     end
   elsif e.is_a? Choice then
@@ -212,6 +213,7 @@ class Exp
     @type = type
     @args = args
     @constraints = []
+    @updates = []
 
     @args.each do |arg|
       if arg.is_a? Exp and arg.constraints != [] then
@@ -223,10 +225,18 @@ class Exp
 
   def save
     puts "____ saving " + self.to_alloy + " with constraints"
-    self.constraints.map{|x| x.to_alloy}.each do |c|
+    (self.constraints + $path_constraints).map{|x| x.to_alloy}.each do |c|
       puts "____  " + c.to_s
     end
     puts "____"
+
+    to_save = self.dup
+    $path_constraints.each do |c|
+      to_save.add_constraint(c)
+    end
+    $saves << to_save
+    
+    Exp.new(@type, self, :save)
   end
 
   def each(&block)
@@ -243,6 +253,14 @@ class Exp
 
   def constraints
     @constraints
+  end
+
+  def updates
+    @updates
+  end
+
+  def set_updates u
+    @updates = u
   end
 
   def add_constraint(constraint)
@@ -288,7 +306,14 @@ class Exp
   end
   
   def method_missing(meth, *args, &block)
-    if @type.respond_to?(:method_defined?) and @type.method_defined?(meth) and @type.method_defined?(:new) then
+    # general method:
+    # check if last char is "=" and if so, apply some modification to self that records the update
+    if meth.to_s[-1,1] == '=' then
+      fname = meth.to_s[0..-2]
+      @updates << Exp.new(@type, fname, :==, *args)
+      puts "THIS IS " + self.to_s + " and my updates are " + self.updates.to_s
+      self
+    elsif @type.respond_to?(:method_defined?) and @type.method_defined?(meth) and @type.method_defined?(:new) then
       @type.new.send(meth, *args)
     elsif $class_fields[@type.to_s] and $class_fields[@type.to_s].map{|x| x.name.to_s + "="}.include? meth.to_s then
       self.add_constraint(Exp.new(:bool, Exp.new(:unknown, self, meth.to_s[0..-2]), :==, args.first))
@@ -362,7 +387,9 @@ class Choice < Exp
   end
 
   def constraints
-    @left.constraints + @right.constraints
+    cl = if @left then @left.constraints else [] end
+    cr = if @right then @right.constraints else [] end
+    cl + cr
   end
 
   def add_constraint(constraint)
