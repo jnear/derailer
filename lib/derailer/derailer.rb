@@ -962,7 +962,7 @@ class Analyzer
     results = Hash.new
     saves = Hash.new
     controller_klasses = ActionController::Base.descendants
-    controller_klasses = [PermissionsController] # remove
+    controller_klasses = [NotesController] # remove
     log "here are the controllers and their actions that I know of"
 
     controller_klasses.each do |c|
@@ -974,7 +974,7 @@ class Analyzer
     controller_klasses.each do |controller|
       controller.action_methods.each do |action|
 
-        next unless action.to_s == "save" # remove
+        next unless action.to_s == "show" # remove
         
         puts "EEE " + action.to_s
         begin
@@ -1148,18 +1148,18 @@ class Analyzer
 
 
 
-    ng = Graph.new("\"\"")
-    add_some_nodes(ng, exps)
+    # ng = Graph.new("\"\"")
+    # add_some_nodes(ng, exps)
 
-    log ng.to_s
+    # log ng.to_s
 
-    File.open(File.expand_path(File.dirname(__FILE__) + '/viz/bubble.json'), 'w') do |file| 
-      file.write ng.to_bubble
-    end
+    # File.open(File.expand_path(File.dirname(__FILE__) + '/viz/bubble.json'), 'w') do |file| 
+    #   file.write ng.to_bubble
+    # end
 
-    File.open(File.expand_path(File.dirname(__FILE__) + '/viz/flare.json'), 'w') do |file| 
-      file.write ng.to_flare
-    end
+    # File.open(File.expand_path(File.dirname(__FILE__) + '/viz/flare.json'), 'w') do |file| 
+    #   file.write ng.to_flare
+    # end
 
     File.open(File.expand_path(File.dirname(__FILE__) + '/viz/flare2.json'), 'w') do |file| 
       file.write graph.to_flare
@@ -1181,6 +1181,31 @@ class Analyzer
 
     log ''
 
+
+    results.each_pair do |controller_action, values|
+      controller, action = controller_action.split("/")
+      puts "NUM: " + values.length.to_s
+
+      values.uniq.each do |v|
+        
+        translated = v.to_alloy
+        next unless translated == "{ note : Note | note.id in params[id] }.content"
+        constraints = v.constraints.map{|c| c.to_alloy}
+        puts translated.to_s
+        puts controller_action
+        constraints.each do |c|
+          puts "   " + c.to_s
+        end
+        puts ""
+        
+        v.constraints.each do |c|
+          puts c.produce_write_constraint
+        end
+      end
+    end
+
+
+    
     # wtf ruby
     $graph = graph
 

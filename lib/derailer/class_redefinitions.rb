@@ -223,6 +223,26 @@ class Exp
     end
   end
 
+  def produce_write_constraint
+    puts "produce write constraint: " + self.to_s
+
+    if @type == :bool then
+      first, op, second = @args
+      puts "op is " + op.to_s
+      case op.to_s
+      when "or"
+        [first.produce_write_constraint, second.produce_write_constraint]
+      when "=="
+        "impossible"
+      end
+    elsif @args.length == 2 then
+      "TRYING: " + @type.to_s.constantize.to_s
+    else
+      "unimplemented " + @type.to_s.constantize.to_s
+    end
+      
+  end
+
   def save
     puts "____ saving " + self.to_alloy + " with constraints"
     (self.constraints + $path_constraints).map{|x| x.to_alloy}.each do |c|
