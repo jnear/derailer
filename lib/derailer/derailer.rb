@@ -962,7 +962,7 @@ class Analyzer
     results = Hash.new
     saves = Hash.new
     controller_klasses = ActionController::Base.descendants
-    controller_klasses = [NotesController] # remove
+    #controller_klasses = [NotesController] # remove
     log "here are the controllers and their actions that I know of"
 
     controller_klasses.each do |c|
@@ -974,7 +974,7 @@ class Analyzer
     controller_klasses.each do |controller|
       controller.action_methods.each do |action|
 
-        next unless action.to_s == "show" # remove
+        #next unless action.to_s == "show" # remove
         
         puts "EEE " + action.to_s
         begin
