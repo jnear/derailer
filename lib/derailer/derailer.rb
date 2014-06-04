@@ -1230,7 +1230,7 @@ class Analyzer
       server.start
     end
     
-    start_web_server
+    #start_web_server
     log ""
     log "All done!"
   end
