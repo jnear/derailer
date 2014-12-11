@@ -1,4 +1,3 @@
-# test
 $strings_used = []
 $pred_names = []
 $types_used = []

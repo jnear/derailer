@@ -67,6 +67,12 @@ class Object
 end
 
 DerailerField = Struct.new(:name, :type)
+Exposure = Struct.new(:path, :constraints, :controller, :action) do
+  def to_s
+    cs = "[" + constraints.join(", ") + "]"
+    "Exposure.new(" + [path, cs, controller.to_exp, action.to_exp].join(", ") + ")"
+  end
+end
 
 $all_vcs = Hash.new
 def add_vcs(controller, action, vc)
@@ -654,6 +660,14 @@ class Analyzer
       end
     end
 
+    def protect(&co)
+      begin
+        co.call
+      rescue => msg
+        log "ERROR: something went wrong ("+msg.to_s+")"
+      end
+    end
+
     activerecord_methods = ActiveRecord::Base.methods
     activerecord_instance_methods = ActiveRecord::Base.instance_methods
     log "Redefining ActiveRecord Classes"
@@ -672,17 +686,23 @@ class Analyzer
       # end
 
       # build a structure describing all the fields and their types
-      begin
+      protect do
         klass.columns.each do |column|
           add_class_field(klass_name, column.name, column.type)
         end
-        
+      end
+
+      protect do
         klass.reflect_on_all_associations.each do |assoc|
-          add_class_field(klass_name, assoc.name, assoc.name.to_s.singularize.capitalize)
+          if assoc.collection? then
+            add_class_field(klass_name, assoc.name, "set " + assoc.name.to_s.singularize.capitalize)
+          else
+            add_class_field(klass_name, assoc.name, assoc.name.to_s.singularize.capitalize)
+          end
         end
-      rescue => msg  
-        log "    ERROR: Something went wrong ("+msg.to_s+")"  
-      end 
+      end
+      
+ 
       
       # replace the class with an expression so that all calls to the class methods are expressions
       # log "replacing class definitions"
@@ -1182,26 +1202,67 @@ class Analyzer
     log ''
 
 
+    # results.each_pair do |controller_action, values|
+    #   controller, action = controller_action.split("/")
+    #   puts "NUM: " + values.length.to_s
+
+    #   #uniq
+    #   values.each do |v|
+        
+    #     translated = v.to_alloy
+    #     #next unless translated == "{ note : Note | note.id in params[id] }.content"
+    #     constraints = v.constraints.map{|c| c.to_alloy}
+    #     puts translated.to_s
+    #     puts controller_action
+    #     constraints.each do |c|
+    #       puts "   " + c.to_s
+    #     end
+    #     puts ""
+        
+    #     v.constraints.each do |c|
+    #       if c.is_a? Exp then
+    #         puts c.produce_write_constraint
+    #       else
+    #         puts "not exp: " + c.to_s
+    #       end
+    #     end
+    #   end
+    # end
+
+
+
+    require File.expand_path(File.dirname(__FILE__) + '/exp_translation')
+
+    exposures = []
+
     results.each_pair do |controller_action, values|
       controller, action = controller_action.split("/")
-      puts "NUM: " + values.length.to_s
+      values.each do |v|
+        begin
+          translated = v.to_exp
+          constraints = v.constraints.map{|c| c.to_exp}
+          puts translated.to_s
+          puts "[" + constraints.join(", ") + "]"
 
-      values.uniq.each do |v|
-        
-        translated = v.to_alloy
-        next unless translated == "{ note : Note | note.id in params[id] }.content"
-        constraints = v.constraints.map{|c| c.to_alloy}
-        puts translated.to_s
-        puts controller_action
-        constraints.each do |c|
-          puts "   " + c.to_s
-        end
-        puts ""
-        
-        v.constraints.each do |c|
-          puts c.produce_write_constraint
+          exposure = Exposure.new(translated, constraints, controller, action)
+          exposures << exposure
+        # rescue => msg
+        #   log "ERROR: couldn't translate " + v.to_s
+        #   log "problem: " + msg.to_s
         end
       end
+    end
+
+
+    class_fields = "{" + $class_fields.map{|klass, fields|
+      '"' + klass + '"' + "=>{" + fields.map{|f| '"' + f.name.to_s + '"' + "=>" + '"' + f.type + '"'}.join(", ") + "}"
+    }.join(", ") + "}"
+
+    puts class_fields
+
+    File.open(File.expand_path(File.dirname(__FILE__) + '/viz/exposures.rb'), 'w') do |file| 
+      file.write "$data_model = " + class_fields + "\n\n"
+      file.write "$read_exposures = " + "[" + exposures.join(", ") + "]\n"
     end
 
 

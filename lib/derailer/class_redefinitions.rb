@@ -236,9 +236,9 @@ class Exp
         "impossible"
       end
     elsif @args.length == 2 then
-      "TRYING: " + @type.to_s.constantize.to_s
+      "TRYING: " + @type.to_s #.constantize.to_s
     else
-      "unimplemented " + @type.to_s.constantize.to_s
+      "unimplemented " + @type.to_s #.constantize.to_s
     end
       
   end
