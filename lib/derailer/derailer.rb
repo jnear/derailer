@@ -1005,10 +1005,10 @@ class Analyzer
     end
       
     controller_klasses.each do |controller|
-      next unless controller.to_s == "RelationshipsController"
+      #next unless controller.to_s == "RelationshipsController"
       controller.action_methods.each do |action|
 
-        next unless action.to_s == "create" # remove
+        #next unless action.to_s == "create" # remove
         
         puts "EEE " + action.to_s
         begin
@@ -1277,6 +1277,23 @@ class Analyzer
       end
     end
 
+    save_exposures = []
+    saves.each_pair do |controller_action, values|
+      controller, action = controller_action.split("/")
+      next if values == nil
+      values.each do |v|
+        begin
+          translated = v.to_exp
+          constraints = v.constraints.map{|c| c.to_exp}
+
+          exposure = Exposure.new(translated, constraints, controller, action)
+          save_exposures << exposure
+        # rescue => msg
+        #   log "ERROR: couldn't translate " + v.to_s
+        #   log "problem: " + msg.to_s
+        end
+      end
+    end
 
     class_fields = "{" + $class_fields.map{|klass, fields|
       '"' + klass.to_s + '"' + 
@@ -1290,6 +1307,7 @@ class Analyzer
     File.open(File.expand_path(File.dirname(__FILE__) + '/viz/exposures.rb'), 'w') do |file| 
       file.write "$data_model = " + class_fields + "\n\n"
       file.write "$read_exposures = " + "[" + exposures.join(", ") + "]\n"
+      file.write "$update_exposures = " + "[" + save_exposures.join(", ") + "]\n"
     end
 
 
