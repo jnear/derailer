@@ -259,6 +259,23 @@ class Exp
     Exp.new(@type, self, :save)
   end
 
+  def update_attributes(params)
+    puts "____ saving update_attributes " + self.to_alloy + " with constraints"
+    (self.constraints + $path_constraints).map{|x| x.to_alloy}.each do |c|
+      puts "____  " + c.to_s
+    end
+    puts "____"
+
+    # should include params?
+    to_save = Exp.new(@type, self.dup, :update_attributes)
+    $path_constraints.each do |c|
+      to_save.add_constraint(c)
+    end
+    $saves << to_save
+    
+    Exp.new(@type, self, :update_attributes)
+  end
+
   def each(&block)
     block.call(self)
   end
@@ -328,6 +345,11 @@ class Exp
   def method_missing(meth, *args, &block)
     # general method:
     # check if last char is "=" and if so, apply some modification to self that records the update
+
+    if meth.to_s == "find_by" then
+      puts "FINDBY #{args}"
+    end
+
     if meth.to_s[-1,1] == '=' then
       fname = meth.to_s[0..-2]
       @updates << Exp.new(@type, fname, :==, *args)
