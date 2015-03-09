@@ -438,14 +438,22 @@ class Analyzer
     def my_load_file(file)
       log "Loading file " + file.to_s
       begin
-        require file
+        require file 
       rescue Exception => e
         log "Error loading file " + file.to_s + ": " + e.to_s
       end
     end
 
+    # log "ESTABLISHING DB CONNECTION"
+    # ActiveRecord::Base.establish_connection(
+    #                                         :adapter => "sqlite3",
+    #                                         :database  => "db/derailer.db"
+    #                                         )
+    # log "DB CONNECTION ESTABLISHED"
+
     Dir.glob(Rails.root.to_s + '/app/models/**/*.rb').each { |file| my_load_file(file) }
     activerecord_klasses = ActiveRecord::Base.descendants
+    log "ACTIVERECORD Loading " + activerecord_klasses.to_s
 
     Dir.glob(Rails.root.to_s + '/app/controllers/**/*.rb').each { |file| my_load_file(file) }
     controller_klasses = ActionController::Base.descendants
@@ -671,75 +679,80 @@ class Analyzer
     activerecord_methods = ActiveRecord::Base.methods
     activerecord_instance_methods = ActiveRecord::Base.instance_methods
     log "Redefining ActiveRecord Classes"
+    log "WORKING list: #{activerecord_klasses}"
     activerecord_klasses.each do |klass|
-      klass_name = klass.to_s
-      klass_methods = klass.methods - activerecord_methods
-      klass_instance_methods = klass.instance_methods - activerecord_instance_methods
-
-      # log "working on class " + klass_name
-      # log "methods: "
-
-      # log "originally " + klass.methods.length.to_s + ", reduced to " + klass_methods.length.to_s
-      # log "and " + klass.instance_methods.length.to_s + "instance methods, reduced to " + klass_instance_methods.length.to_s
-      # klass_methods.each do |m|
-      #   log "  " + m.to_s
-      # end
-
-      # build a structure describing all the fields and their types
       protect do
-        klass.columns.each do |column|
-          add_class_field(klass_name, column.name, column.type)
-        end
-      end
+        puts "WORKING on #{klass}"
+        klass_name = klass.to_s
+        klass_methods = klass.methods - activerecord_methods
+        klass_instance_methods = klass.instance_methods - activerecord_instance_methods
+        
+        # log "working on class " + klass_name
+        # log "methods: "
+        
+        # log "originally " + klass.methods.length.to_s + ", reduced to " + klass_methods.length.to_s
+        # log "and " + klass.instance_methods.length.to_s + "instance methods, reduced to " + klass_instance_methods.length.to_s
+        # klass_methods.each do |m|
+        #   log "  " + m.to_s
+        # end
 
-      protect do
-        klass.reflect_on_all_associations.each do |assoc|
-          if assoc.collection? then
-            add_class_field(klass_name, assoc.name, "set " + assoc.name.to_s.singularize.capitalize)
-          else
-            add_class_field(klass_name, assoc.name, assoc.name.to_s.singularize.capitalize)
+        # build a structure describing all the fields and their types
+        protect do
+          klass.columns.each do |column|
+            add_class_field(klass_name, column.name, column.type)
           end
         end
-      end
-      
- 
-      
-      # replace the class with an expression so that all calls to the class methods are expressions
-      # log "replacing class definitions"
-      new_klass = Exp.new(klass_name, klass_name)
-      new_klass.send(:define_method, :controller_name, lambda { klass_name })
 
-      klass_methods.each do |m|
-        old_method = klass.method(m)
-        new_klass.metaclass.send(:define_method, m, lambda{|*args|
-                                   log "HOHA: " + m.to_s
-                                   old_method.call(*args)
-                                 })
-      end
+        protect do
+          klass.reflect_on_all_associations.each do |assoc|
+            if assoc.collection? then
+              add_class_field(klass_name, assoc.name, "set " + assoc.name.to_s.singularize.capitalize)
+            else
+              add_class_field(klass_name, assoc.name, assoc.name.to_s.singularize.capitalize)
+            end
+          end
+        end
+        
+        
+        
+        # replace the class with an expression so that all calls to the class methods are expressions
+        # log "replacing class definitions"
+        new_klass = Exp.new(klass_name, klass_name)
+        new_klass.send(:define_method, :controller_name, lambda { klass_name })
 
-      klass_instance_methods.each do |m|
-        old_method = klass.instance_method(m)
-        new_klass.send(:define_method, m, lambda{|*args|
-                                   log "HOHAE: " + m.to_s
-                                   old_method.call(*args)
-                                 })
-      end
+        klass_methods.each do |m|
+          old_method = klass.method(m)
+          new_klass.metaclass.send(:define_method, m, lambda{|*args|
+                                     log "HOHA: " + m.to_s
+                                     old_method.call(*args)
+                                   })
+        end
+
+        klass_instance_methods.each do |m|
+          old_method = klass.instance_method(m)
+          new_klass.send(:define_method, m, lambda{|*args|
+                           log "HOHAE: " + m.to_s
+                           old_method.call(*args)
+                         })
+        end
 
 
-      # THIS IS FOR THE BIIIIIIIIIIIIG OVERSIGHT
-      # an EXP needs to ask in method_missing:
-      #  is this method defined in my "type"'s CLASS DEFN
-      # and if so, run that instead of producing an exp
-      # log "has photos_from? " + new_klass.respond_to?(:photos_from).to_s
-      # log "has photos_from? in thingy " + klass_instance_methods.map{|x| x.to_s}.include?('photos_from').to_s
+        # THIS IS FOR THE BIIIIIIIIIIIIG OVERSIGHT
+        # an EXP needs to ask in method_missing:
+        #  is this method defined in my "type"'s CLASS DEFN
+        # and if so, run that instead of producing an exp
+        # log "has photos_from? " + new_klass.respond_to?(:photos_from).to_s
+        # log "has photos_from? in thingy " + klass_instance_methods.map{|x| x.to_s}.include?('photos_from').to_s
 
-      #replace_defs(klass, new_klass)
+        #replace_defs(klass, new_klass)
 
-      fst, snd = klass.to_s.split("::")
-      if snd then
-        fst.constantize.const_set(snd, new_klass)
-      else
-        Object.const_set(klass.to_s, new_klass)
+        fst, snd = klass.to_s.split("::")
+        if snd then
+          fst.constantize.const_set(snd, new_klass)
+        else
+          puts "replacing #{klass.to_s}"
+          Object.const_set(klass.to_s, new_klass)
+        end
       end
     end
 
@@ -992,9 +1005,10 @@ class Analyzer
     end
       
     controller_klasses.each do |controller|
+      next unless controller.to_s == "RelationshipsController"
       controller.action_methods.each do |action|
 
-        #next unless action.to_s == "show" # remove
+        next unless action.to_s == "create" # remove
         
         puts "EEE " + action.to_s
         begin
@@ -1004,7 +1018,17 @@ class Analyzer
           saves[controller.to_s + "/" + action.to_s] = assign_saves if assign_saves != []
         rescue UnreachableException => e
           log "UNREACHABLE"
-          # unreachable...do nothing
+          log "SAVES IS #{$saves}"
+          # unreachable...but side effects still happen!
+
+          $saves = $saves.map{|e| flatten_exp(e)}.flatten(1)
+          $saves.each do |e|
+            consolidate_constraints(e)
+            puts "save is " + e.to_s + " and its updates are " + e.updates.to_s
+          end
+
+          saves[controller.to_s + "/" + action.to_s] = $saves if $saves != []
+
         rescue Exception => e
           log "ERROR: couldn't do this one: " + e.to_s
           e.backtrace.each do |line|
@@ -1255,7 +1279,10 @@ class Analyzer
 
 
     class_fields = "{" + $class_fields.map{|klass, fields|
-      '"' + klass + '"' + "=>{" + fields.map{|f| '"' + f.name.to_s + '"' + "=>" + '"' + f.type + '"'}.join(", ") + "}"
+      '"' + klass.to_s + '"' + 
+      "=>{" + fields.map{|f| '"' + 
+        f.name.to_s + '"' + "=>" + '"' + 
+        f.type.to_s + '"'}.join(", ") + "}"
     }.join(", ") + "}"
 
     puts class_fields
